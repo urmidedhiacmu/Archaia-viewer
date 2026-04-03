@@ -1,0 +1,577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Archaia — Artifact Browser</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:        #F6F2EB;
+  --surface:   #FFFFFF;
+  --surface2:  #F0EAE0;
+  --border:    #DDD5C5;
+  --border2:   #C5B89E;
+  --text:      #18100A;
+  --text2:     #3E3020;
+  --text3:     #897560;
+  --accent:    #7D3A10;
+  --accent-lt: #F5EBE0;
+  --gold:      #9A7228;
+  --gold-lt:   #FDF6E3;
+  --gpt:       #1A6535;
+  --gpt-lt:    #E8F5EE;
+  --gemini:    #1848A0;
+  --gemini-lt: #E8EFFA;
+  --groq:      #6E3090;
+  --groq-lt:   #F2EAF8;
+  --uses-bg:   #FBF6EE;
+  --uses-border: #D4C4A8;
+  --r:         6px;
+  --sidebar:   280px;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; overflow: hidden; }
+body { font-family: 'Source Serif 4', Georgia, serif; background: var(--bg); color: var(--text); font-size: 15.5px; }
+
+/* ── HEADER ── */
+header {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  height: 58px; background: var(--surface); border-bottom: 2px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between; padding: 0 1.75rem;
+}
+.logo { display: flex; align-items: baseline; gap: 0.65rem; }
+.logo-name { font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; font-weight: 700; letter-spacing: 0.14em; color: var(--accent); text-transform: uppercase; }
+.logo-div { color: var(--border2); font-size: 1.1rem; }
+.logo-sub { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-style: italic; color: var(--text3); }
+.hright { display: flex; align-items: center; gap: 1.2rem; }
+#hstats { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; color: var(--text3); text-align: right; line-height: 1.9; }
+.load-btn { padding: 0.4rem 1.1rem; background: var(--accent); color: white; border: none; border-radius: var(--r); font-family: 'Source Serif 4', serif; font-size: 0.88rem; cursor: pointer; transition: background 0.15s; }
+.load-btn:hover { background: #9a4a18; }
+#file-input { display: none; }
+
+/* ── LAYOUT ── */
+.app { position: fixed; top: 58px; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: var(--sidebar) 1fr; }
+
+/* ── SIDEBAR ── */
+.sidebar { background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
+.sidebar-top { padding: 1rem 1.1rem; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.slabel { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--text3); margin-bottom: 0.55rem; }
+.search { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: var(--r); padding: 0.4rem 0.75rem; font-family: 'Source Serif 4', serif; font-size: 0.9rem; color: var(--text); outline: none; transition: border-color 0.15s; }
+.search:focus { border-color: var(--accent); }
+.search::placeholder { color: var(--text3); }
+
+.art-list { flex: 1; overflow-y: auto; padding: 0.4rem 0; }
+.art-list::-webkit-scrollbar { width: 4px; }
+.art-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+
+.art-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 1.1rem; cursor: pointer; border-left: 3px solid transparent; transition: all 0.12s; position: relative; }
+.art-item:hover { background: var(--surface2); }
+.art-item.active { border-left-color: var(--accent); background: var(--accent-lt); }
+.art-thumb { width: 42px; height: 42px; flex-shrink: 0; border-radius: 4px; border: 1px solid var(--border); overflow: hidden; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--text3); }
+.art-thumb img { width: 100%; height: 100%; object-fit: cover; }
+.art-info { min-width: 0; flex: 1; }
+.art-name { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.art-proj { font-size: 0.74rem; color: var(--text3); font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.uses-dot {
+  width: 7px; height: 7px; border-radius: 50%;
+  background: var(--accent); flex-shrink: 0;
+  title: "Has generated uses";
+}
+
+/* ── MAIN ── */
+.main { overflow-y: auto; background: var(--bg); }
+.main::-webkit-scrollbar { width: 5px; }
+.main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+
+/* ── WELCOME ── */
+.welcome { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 3rem; }
+.welcome-icon { font-size: 3.5rem; margin-bottom: 1.5rem; opacity: 0.18; }
+.welcome h1 { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 700; color: var(--accent); margin-bottom: 0.5rem; }
+.welcome p { color: var(--text2); max-width: 440px; line-height: 1.75; margin-bottom: 1.75rem; font-size: 1rem; }
+.welcome-load { padding: 0.6rem 1.8rem; background: var(--accent); color: white; border: none; border-radius: var(--r); font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: background 0.15s; }
+.welcome-load:hover { background: #9a4a18; }
+.welcome-hint { margin-top: 1.1rem; font-size: 0.72rem; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
+
+/* ── DETAIL ── */
+.detail { padding: 2.2rem 2.8rem 5rem; animation: fadeIn 0.22s ease; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+
+.det-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--text3); margin-bottom: 0.35rem; }
+.det-title { font-family: 'Cormorant Garamond', serif; font-size: 2.6rem; font-weight: 700; line-height: 1.08; margin-bottom: 0.75rem; color: var(--text); }
+
+.badges { display: flex; gap: 0.45rem; flex-wrap: wrap; margin-bottom: 1.8rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); align-items: center; }
+.badge { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; padding: 0.22em 0.65em; border-radius: 3px; border: 1px solid var(--border2); color: var(--text3); background: var(--surface2); }
+.badge-project { border-color: var(--accent); color: var(--accent); background: var(--accent-lt); }
+.badge-uses { border-color: var(--gold); color: var(--gold); background: var(--gold-lt); font-weight: 500; }
+
+/* Images grid */
+.img-section { margin-bottom: 2rem; }
+.img-section-title { font-family: 'JetBrains Mono', monospace; font-size: 0.57rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text3); margin-bottom: 0.9rem; }
+.img-grid { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.img-grid img { height: 140px; width: auto; object-fit: cover; border-radius: var(--r); border: 1px solid var(--border); cursor: zoom-in; transition: border-color 0.15s, transform 0.18s, box-shadow 0.18s; }
+.img-grid img:hover { border-color: var(--accent); transform: scale(1.03); box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
+.no-img { height: 120px; width: 140px; border: 1px dashed var(--border2); border-radius: var(--r); display: flex; align-items: center; justify-content: center; color: var(--text3); font-size: 0.8rem; font-style: italic; }
+
+/* Metadata */
+.meta-section { margin-bottom: 2rem; }
+.meta-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 1.2rem 1.4rem; }
+.meta-card-title { font-family: 'JetBrains Mono', monospace; font-size: 0.57rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text3); margin-bottom: 0.9rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+.meta-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.3rem 1.5rem; margin-bottom: 0.5rem; }
+.mrow { font-size: 0.87rem; line-height: 1.6; }
+.mk { color: var(--text3); font-style: italic; }
+.mv { color: var(--text2); }
+.mlong { grid-column: 1/-1; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--border); }
+.mlong .mk { display: block; margin-bottom: 0.2rem; }
+.mlong .mv { display: block; color: var(--text); font-size: 0.9rem; line-height: 1.7; }
+
+/* Extra fields toggle */
+.extra-toggle {
+  display: inline-flex; align-items: center; gap: 0.4rem;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
+  color: var(--text3); cursor: pointer; user-select: none;
+  transition: color 0.12s; margin-top: 0.8rem;
+  writing-mode: horizontal-tb;
+}
+.extra-toggle:hover { color: var(--text2); }
+.extra-toggle .earrow { transition: transform 0.15s; display: inline-block; }
+.extra-toggle.open .earrow { transform: rotate(90deg); }
+.extra-grid { display: none; margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px dashed var(--border); grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.3rem 1.5rem; }
+.extra-grid.open { display: grid; }
+
+/* ── USES SECTION ── */
+.uses-section {
+  background: var(--uses-bg);
+  border: 1px solid var(--uses-border);
+  border-radius: var(--r);
+  padding: 1.8rem 2rem;
+  margin-bottom: 2rem;
+}
+.uses-header {
+  display: flex; align-items: baseline; justify-content: space-between;
+  margin-bottom: 1.4rem; padding-bottom: 1rem;
+  border-bottom: 1px solid var(--uses-border);
+  flex-wrap: wrap; gap: 0.75rem;
+}
+.uses-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.3rem; font-weight: 700; color: var(--accent);
+}
+.uses-subtitle {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem; color: var(--text3);
+  text-transform: uppercase; letter-spacing: 0.1em;
+}
+
+/* Filter bar */
+.filter-bar { display: flex; gap: 2rem; flex-wrap: wrap; align-items: center; margin-bottom: 1.4rem; }
+.fg { display: flex; flex-direction: column; gap: 0.4rem; }
+.flabel { font-family: 'JetBrains Mono', monospace; font-size: 0.56rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text3); }
+.chips { display: flex; gap: 0.35rem; flex-wrap: wrap; }
+.chip { font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; padding: 0.24em 0.7em; border-radius: 3px; border: 1px solid var(--border2); background: transparent; color: var(--text3); cursor: pointer; transition: all 0.12s; }
+.chip:hover { border-color: var(--text2); color: var(--text2); }
+.on-gpt    { background: var(--gpt-lt);    border-color: var(--gpt)!important;    color: var(--gpt)!important; }
+.on-gemini { background: var(--gemini-lt); border-color: var(--gemini)!important; color: var(--gemini)!important; }
+.on-groq   { background: var(--groq-lt);   border-color: var(--groq)!important;   color: var(--groq)!important; }
+.on-mode   { background: var(--accent-lt); border-color: var(--accent)!important; color: var(--accent)!important; }
+.on-prompt { background: var(--gold-lt);   border-color: var(--gold)!important;   color: var(--gold)!important; }
+.vdiv { width: 1px; background: var(--border); align-self: stretch; }
+
+.sec-label { font-family: 'Cormorant Garamond', serif; font-size: 0.9rem; font-style: italic; color: var(--text3); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
+.sec-label::after { content: ''; flex: 1; height: 1px; background: var(--uses-border); }
+
+/* Combo grid */
+.combo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(600px, 1fr)); gap: 1.4rem; }
+.combo-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; transition: box-shadow 0.18s, border-color 0.18s, transform 0.18s; animation: fadeIn 0.2s ease both; }
+.combo-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); border-color: var(--border2); transform: translateY(-1px); }
+.chead { padding: 0.65rem 1.1rem; display: flex; align-items: center; gap: 0.45rem; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
+.chead.h-gpt    { background: var(--gpt-lt); }
+.chead.h-gemini { background: var(--gemini-lt); }
+.chead.h-groq   { background: var(--groq-lt); }
+.tag { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; padding: 0.18em 0.6em; border-radius: 3px; font-weight: 500; }
+.t-gpt    { background: var(--gpt);    color: white; }
+.t-gemini { background: var(--gemini); color: white; }
+.t-groq   { background: var(--groq);   color: white; }
+.t-mode   { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
+.t-prompt { background: var(--gold-lt); color: var(--gold); border: 1px solid #E0C878; }
+
+.cbody { padding: 1.4rem 1.5rem; }
+.prompt-toggle { display: flex; align-items: center; gap: 0.4rem; font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--text3); cursor: pointer; user-select: none; margin-bottom: 1rem; padding-bottom: 0.75rem; border-bottom: 1px dashed var(--border); transition: color 0.12s; }
+.prompt-toggle:hover { color: var(--text2); }
+.prompt-toggle .arrow { transition: transform 0.15s; display: inline-block; }
+.prompt-toggle.open .arrow { transform: rotate(90deg); }
+.prompt-box { display: none; margin-top: -0.5rem; margin-bottom: 1rem; padding: 0.9rem 1rem; background: var(--surface2); border-radius: 4px; border: 1px solid var(--border); font-size: 0.8rem; line-height: 1.7; color: var(--text3); font-style: italic; white-space: pre-wrap; }
+.prompt-box.open { display: block; }
+.ctext { font-size: 0.94rem; line-height: 1.82; color: var(--text2); }
+.ctext strong { color: var(--text); font-weight: 600; }
+.ctext.is-error { color: #B03020; font-style: italic; font-size: 0.84rem; }
+.ctext.is-skip  { color: var(--text3); font-style: italic; }
+.no-combos { grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text3); font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; }
+
+/* No uses notice */
+.no-uses-notice {
+  background: var(--surface2); border: 1px solid var(--border);
+  border-radius: var(--r); padding: 1.4rem 1.6rem;
+  color: var(--text3); font-style: italic; font-size: 0.95rem;
+  line-height: 1.6; margin-bottom: 2rem;
+}
+
+/* Lightbox */
+.lightbox { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.88); align-items: center; justify-content: center; cursor: zoom-out; }
+.lightbox.open { display: flex; }
+.lightbox img { max-width: 92vw; max-height: 92vh; border-radius: var(--r); box-shadow: 0 8px 40px rgba(0,0,0,0.5); }
+</style>
+</head>
+<body>
+
+<div class="lightbox" id="lightbox" onclick="closeLightbox()">
+  <img id="lb-img" src="" alt="">
+</div>
+
+<header>
+  <div class="logo">
+    <span class="logo-name">Archaia</span>
+    <span class="logo-div">·</span>
+    <span class="logo-sub">Artifact Browser & Use Generation Study</span>
+  </div>
+  <div class="hright">
+    <div id="hstats">—</div>
+    <button class="load-btn" onclick="document.getElementById('file-input').click()">Load JSON</button>
+    <input type="file" id="file-input" accept=".json">
+  </div>
+</header>
+
+<div class="app">
+  <aside class="sidebar">
+    <div class="sidebar-top">
+      <div class="slabel">Artifacts</div>
+      <input class="search" id="search" type="text" placeholder="Filter by name or project…">
+    </div>
+    <div class="art-list" id="art-list">
+      <div style="padding:1.5rem;color:var(--text3);font-style:italic;font-size:0.88rem;text-align:center">Load combined_data.json to begin</div>
+    </div>
+  </aside>
+
+  <main class="main" id="main">
+    <div class="welcome" id="welcome">
+      <div class="welcome-icon">𓏢</div>
+      <h1>Archaia Artifact Browser</h1>
+      <p>Load <code style="font-family:'JetBrains Mono';font-size:0.82em;color:var(--accent);background:var(--accent-lt);padding:0.1em 0.4em;border-radius:3px">combined_data.json</code> to browse 100+ artifacts with metadata, images, and LLM-generated use hypotheses for selected artifacts.</p>
+      <button class="welcome-load" onclick="document.getElementById('file-input').click()">Load Data</button>
+      <div class="welcome-hint">● dot in sidebar = artifact has generated uses</div>
+    </div>
+  </main>
+</div>
+
+<script>
+let DATA = null, cur = 0;
+let F = { models: new Set(), modes: new Set(), prompts: new Set() };
+
+const PROMPT_TEXTS = {
+  archaeological: `You are writing a use-hypothesis section for an archaeological site report.
+Based on the artifact data provided, produce:
+1. One sentence identifying the artifact and its key physical characteristics
+2. Three to five numbered use hypotheses, each with:
+   - A specific proposed function
+   - Evidence from the provided data that supports it
+   - A confidence level (high / medium / low)
+3. A one-sentence note on what additional evidence would strengthen or refute the leading hypothesis
+
+Use precise academic language. Hedge all claims appropriately. Do not invent facts not in the data. Under 320 words.`,
+  museum_label: `You are writing interpretive content for a museum exhibit on ancient material culture.
+Based on the artifact data provided, write:
+1. A short engaging title for this artifact (max 6 words)
+2. A 2-3 sentence description for a general adult audience — vivid, concrete, no jargon
+3. A section called "How might this have been used?" with 3-4 plausible uses as short accessible sentences
+4. One sentence connecting this object to a universal human experience
+
+Make it engaging and human. Be honest about uncertainty. Under 280 words.`,
+  generative: `You are reconstructing the human story behind an archaeological artifact.
+Based on the data provided, write a short first-person narrative (150-200 words) imagining:
+- Who likely owned or used this object
+- What they used it for, based specifically on the physical evidence provided
+- How and why it ended up in the archaeological context where it was found
+
+Then add 2-3 bullet points labeling which specific data fields informed each element of your story.
+Flag any detail you invented without evidence.`
+};
+
+const ML = m => m.includes('gpt') ? 'GPT-4o-mini' : m.includes('gemini') ? 'Gemini Flash Lite' : 'Llama 3.3 70B';
+const MC = m => m.includes('gpt') ? 'gpt' : m.includes('gemini') ? 'gemini' : 'groq';
+const PL = { archaeological:'Archaeological', museum_label:'Museum Label', generative:'Generative' };
+const IL = { sparse:'Sparse', full_and_images:'Full + Images' };
+
+const FIELD_LABELS = {
+  label:'Label', project_label:'Project', project:'Project',
+  recovered_artifact_name:'Artifact Name', recovered_material:'Material',
+  recovered_material_note:'Material Note', recovered_object_type:'Object Type',
+  recovered_object_type_note:'Object Type Note', recovered_period:'Period',
+  recovered_chronotype:'Chronotype', recovered_condition:'Condition',
+  recovered_size:'Size', recovered_munsell_color:'Munsell Color',
+  recovered_munsell_number:'Munsell No.', recovered_fabric_description:'Fabric',
+  recovered_fabric_group:'Fabric Group', recovered_decorative_technique:'Decorative Technique',
+  recovered_description:'Description', recovered_description_remarks:'Description Remarks',
+  recovered_note:'Note', recovered_function:'Recorded Function',
+  recovered_location:'Location', recovered_specific_context:'Specific Context',
+  recovered_specific_location:'Specific Location', recovered_locus:'Locus',
+  recovered_locus_id:'Locus ID', recovered_registration_date:'Registration Date',
+  recovered_disposition:'Disposition', recovered_text_fields_json:'Full Recovered JSON',
+  earliest:'Earliest Date', latest:'Latest Date', latitude:'Latitude', longitude:'Longitude',
+  start:'Start', stop:'Stop', slug:'Slug', context_uuid:'Context UUID',
+  item_class_uuid:'Item Class UUID', project_uuid:'Project UUID',
+  reference_type:'Reference Type', is_best:'Is Best', quality_score:'Quality Score',
+  geo_depth:'Geo Depth', geo_specificity_y:'Geo Specificity', geo_zoom:'Geo Zoom',
+  geometry:'Geometry', geometry_type:'Geometry Type', image_count_y:'Image Count',
+  metadata:'Project Metadata', chrono_depth:'Chrono Depth',
+};
+
+const LONG_KEYS = new Set([
+  'recovered_description','recovered_note','recovered_function',
+  'recovered_fabric_description','recovered_decorative_technique',
+  'recovered_material_note','recovered_object_type_note',
+  'recovered_description_remarks','recovered_text_fields_json','metadata','geometry'
+]);
+
+fetch('./combined_data.json').then(r => r.json()).then(init).catch(() => {});
+
+document.getElementById('file-input').addEventListener('change', e => {
+  const f = e.target.files[0]; if (!f) return;
+  const r = new FileReader();
+  r.onload = ev => {
+    try { init(JSON.parse(ev.target.result)); }
+    catch(err) { console.error(err); alert('Could not parse JSON: ' + err.message); }
+  };
+  r.readAsText(f);
+});
+
+function init(data) {
+  DATA = data;
+  const arts   = data.artifacts || [];
+  const matrix = data.ablation_matrix || [];
+  const models = [...new Set(matrix.map(c => c.model))];
+  F = {
+    models:  new Set(models),
+    modes:   new Set([...new Set(matrix.map(c => c.input_mode))]),
+    prompts: new Set([...new Set(matrix.map(c => c.prompt_style))]),
+  };
+  const s = data.stats || {};
+  document.getElementById('welcome').style.display = 'none';
+  document.getElementById('hstats').innerHTML =
+    `${arts.length} artifacts · ${s.with_llm||0} with generated uses<br>${models.map(ML).join(' · ')}`;
+  renderSidebar(arts);
+  if (arts.length) show(0);
+}
+
+// ── SIDEBAR ────────────────────────────────────────────────────────────────
+function renderSidebar(arts, q='') {
+  const list = document.getElementById('art-list');
+  const filtered = arts.filter(a =>
+    !q || a.name.toLowerCase().includes(q.toLowerCase()) ||
+    (a.project||'').toLowerCase().includes(q.toLowerCase())
+  );
+  list.innerHTML = filtered.length ? filtered.map(a => {
+    const idx  = DATA.artifacts.indexOf(a);
+    const thumb = a.images && a.images.length ? a.images[0] : null;
+    return `<div class="art-item${idx===cur?' active':''}" onclick="selectArt(${idx})">
+      <div class="art-thumb">${thumb ? `<img src="${thumb}" onerror="this.parentNode.textContent='𓏢'">` : '𓏢'}</div>
+      <div class="art-info">
+        <div class="art-name">${esc(a.name)}</div>
+        <div class="art-proj">${esc(a.project||'—')}</div>
+      </div>
+      ${a.has_llm ? '<div class="uses-dot" title="Has generated use hypotheses"></div>' : ''}
+    </div>`;
+  }).join('') : '<div style="padding:1.2rem;color:var(--text3);font-style:italic;text-align:center">No matches</div>';
+}
+
+function selectArt(idx) { cur=idx; renderSidebar(DATA.artifacts, document.getElementById('search').value); show(idx); }
+document.getElementById('search').addEventListener('input', e => renderSidebar(DATA?.artifacts||[], e.target.value));
+
+// ── DETAIL ─────────────────────────────────────────────────────────────────
+function show(idx) {
+  cur = idx;
+  const a      = DATA.artifacts[idx];
+  const kf     = a.key_fields   || a.text_fields || {};
+  const ef     = a.extra_fields || {};
+  const matrix = DATA.ablation_matrix || [];
+  const models = [...new Set(matrix.map(c => c.model))];
+  const modes  = [...new Set(matrix.map(c => c.input_mode))];
+  const prompts= [...new Set(matrix.map(c => c.prompt_style))];
+
+  // Badges
+  const proj = kf.project_label || kf.project || a.project || '';
+  const period = kf.recovered_period || '';
+  const mat    = kf.recovered_material || '';
+  const badgesH = [
+    proj   ? `<span class="badge badge-project">${esc(proj)}</span>` : '',
+    period ? `<span class="badge">${esc(String(period).slice(0,40))}</span>` : '',
+    mat    ? `<span class="badge">${esc(String(mat).slice(0,30))}</span>` : '',
+    a.has_llm ? `<span class="badge badge-uses">✦ Generated Uses Available</span>` : '',
+  ].filter(Boolean).join('');
+
+  // Images
+  const imgs = a.images || [];
+  const imgH = imgs.length
+    ? imgs.map((src,i) => `<img src="${src}" onerror="this.style.display='none'" onclick="openLB('${src}')" loading="lazy" alt="Artifact image ${i+1}">`).join('')
+    : '<div class="no-img">No images</div>';
+
+  // Key fields
+  const SHORT_KEYS = ['label','project_label','recovered_material','recovered_object_type',
+    'recovered_period','recovered_condition','recovered_size','recovered_munsell_color',
+    'recovered_chronotype','earliest','latest'];
+  const LONG_KEY_KEYS = ['recovered_description','recovered_note','recovered_function',
+    'recovered_fabric_description','recovered_decorative_technique'];
+
+  const shortH = SHORT_KEYS
+    .filter(k => kf[k] && String(kf[k]).trim())
+    .map(k => `<div class="mrow"><span class="mk">${FIELD_LABELS[k]||k}: </span><span class="mv">${esc(String(kf[k]).slice(0,120))}</span></div>`)
+    .join('');
+
+  const longH = LONG_KEY_KEYS
+    .filter(k => kf[k] && String(kf[k]).trim())
+    .map(k => `<div class="mrow mlong"><span class="mk">${FIELD_LABELS[k]||k}</span><span class="mv">${esc(String(kf[k]).slice(0,600))}${String(kf[k]).length>600?'…':''}</span></div>`)
+    .join('');
+
+  // Extra fields
+  const extraH = Object.entries(ef)
+  .filter(([k,v]) => v && String(v).trim() && String(v) !== 'nan' && !String(v).startsWith("b'\\x") && !String(v).startsWith('b"\\x'))
+    .map(([k,v]) => {
+      const label = FIELD_LABELS[k] || k.replace(/_/g,' ');
+      const isLong = LONG_KEYS.has(k) || String(v).length > 80;
+      const val   = String(v).slice(0, 400) + (String(v).length > 400 ? '…' : '');
+      return isLong
+        ? `<div class="mrow mlong"><span class="mk">${label}</span><span class="mv">${esc(val)}</span></div>`
+        : `<div class="mrow"><span class="mk">${label}: </span><span class="mv">${esc(val)}</span></div>`;
+    }).join('');
+
+  // Filter chips
+  const mchips = models.map(m => { const mc=MC(m),on=F.models.has(m)?`on-${mc}`:''; return `<button class="chip ${on}" data-g="models" data-v="${m}" data-mc="${mc}">${ML(m)}</button>`; }).join('');
+  const dchips = modes.map(m  => { const on=F.modes.has(m)?'on-mode':''; return `<button class="chip ${on}" data-g="modes" data-v="${m}" data-mc="mode">${IL[m]||m}</button>`; }).join('');
+  const pchips = prompts.map(p=> { const on=F.prompts.has(p)?'on-prompt':''; return `<button class="chip ${on}" data-g="prompts" data-v="${p}" data-mc="prompt">${PL[p]||p}</button>`; }).join('');
+
+  // Uses section
+  const usesH = a.has_llm ? `
+    <div class="uses-section">
+      <div class="uses-header">
+        <div>
+          <div class="uses-title">Generated Use Hypotheses</div>
+          <div class="uses-subtitle" style="margin-top:0.3rem">AI-generated interpretations · not verified archaeological claims</div>
+        </div>
+      </div>
+      <div class="filter-bar" id="fb">
+        <div class="fg"><div class="flabel">Model</div><div class="chips">${mchips}</div></div>
+        <div class="vdiv"></div>
+        <div class="fg"><div class="flabel">Input Mode</div><div class="chips">${dchips}</div></div>
+        <div class="vdiv"></div>
+        <div class="fg"><div class="flabel">Prompt Style</div><div class="chips">${pchips}</div></div>
+      </div>
+      <div class="sec-label" id="slabel"></div>
+      <div class="combo-grid" id="cgrid"></div>
+    </div>` : `
+    <div class="no-uses-notice">
+      No generated use hypotheses for this artifact. Use hypotheses were generated for a subset of 19 artifacts selected for study. Browse the sidebar for artifacts marked with ●.
+    </div>`;
+
+  document.getElementById('main').innerHTML = `
+  <div class="detail">
+    <div class="det-eyebrow">Artifact · ${esc(kf.label || a.label || '')}</div>
+    <div class="det-title">${esc(a.name)}</div>
+    <div class="badges">${badgesH}</div>
+
+    <div class="img-section">
+      <div class="img-section-title">${imgs.length} Image${imgs.length!==1?'s':''} · click to enlarge</div>
+      <div class="img-grid">${imgH}</div>
+    </div>
+
+    <div class="meta-section">
+      <div class="meta-card">
+        <div class="meta-card-title">
+          <span>Key Metadata</span>
+        </div>
+        <div class="meta-grid">${shortH}${longH}</div>
+        ${extraH ? `
+        <div class="extra-toggle" onclick="toggleExtra(this)" id="extra-toggle">
+          <span class="earrow">▶</span> SHOW ALL FIELDS (${Object.keys(ef).length} additional)
+        </div>
+        <div class="extra-grid" id="extra-grid">${extraH}</div>` : ''}
+      </div>
+    </div>
+
+    ${usesH}
+  </div>`;
+
+  if (a.has_llm) {
+    document.getElementById('fb').addEventListener('click', e => {
+      const b = e.target.closest('.chip'); if (!b) return;
+      const { g, v, mc } = b.dataset;
+      if (F[g].has(v)) { F[g].delete(v); b.className='chip'; }
+      else             { F[g].add(v);    b.className=`chip on-${mc}`; }
+      renderCombos(a.combos||[]);
+    });
+    renderCombos(a.combos||[]);
+  }
+}
+
+function toggleExtra(btn) {
+  const grid = document.getElementById('extra-grid');
+  grid.classList.toggle('open');
+  btn.classList.toggle('open');
+  btn.querySelector('.earrow').parentElement.childNodes[1].textContent =
+    grid.classList.contains('open') ? ' HIDE EXTRA FIELDS' : ` SHOW ALL FIELDS (${grid.querySelectorAll('.mrow').length} additional)`;
+}
+
+// ── COMBOS ──────────────────────────────────────────────────────────────────
+function renderCombos(combos) {
+  const grid = document.getElementById('cgrid');
+  const sl   = document.getElementById('slabel');
+  if (!grid) return;
+  const vis = combos.filter(c =>
+    F.models.has(c.model) && F.modes.has(c.input_mode) && F.prompts.has(c.prompt_style));
+  sl.textContent = `Showing ${vis.length} of ${combos.length} use generation results`;
+  if (!vis.length) { grid.innerHTML = '<div class="no-combos">No combinations match the current filters.</div>'; return; }
+
+  grid.innerHTML = vis.map((c,i) => {
+    const mc    = MC(c.model);
+    const isErr = c.response.startsWith('[ERROR');
+    const isSk  = c.response.startsWith('[SKIP');
+    const tcls  = isErr ? 'ctext is-error' : isSk ? 'ctext is-skip' : 'ctext';
+    const pid   = `pt-${i}`;
+    return `
+    <div class="combo-card" style="animation-delay:${i*0.03}s">
+      <div class="chead h-${mc}">
+        <span class="tag t-${mc}">${ML(c.model)}</span>
+        <span class="tag t-mode">${IL[c.input_mode]||c.input_mode}</span>
+        <span class="tag t-prompt">${PL[c.prompt_style]||c.prompt_style}</span>
+      </div>
+      <div class="cbody">
+        <div class="prompt-toggle" onclick="togglePrompt('${pid}',this)">
+          <span class="arrow">▶</span> VIEW PROMPT USED
+        </div>
+        <div class="prompt-box" id="${pid}">${esc(PROMPT_TEXTS[c.prompt_style]||c.prompt_style)}</div>
+        <div class="${tcls}">${isErr||isSk ? esc(c.response) : renderMd(c.response)}</div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function togglePrompt(id, btn) {
+  document.getElementById(id).classList.toggle('open');
+  btn.classList.toggle('open');
+}
+
+function renderMd(s) {
+  return esc(s)
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    .replace(/^###\s(.+)$/gm, '<div style="font-weight:600;font-size:0.96rem;margin-top:0.7rem;color:var(--text)">$1</div>')
+    .replace(/^##\s(.+)$/gm,  '<div style="font-weight:700;font-size:1rem;margin-top:0.8rem;color:var(--text)">$1</div>')
+    .replace(/\n\n/g, '<br><br>')
+    .replace(/\n/g, '<br>');
+}
+
+function openLB(src) { document.getElementById('lb-img').src=src; document.getElementById('lightbox').classList.add('open'); }
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+document.addEventListener('keydown', e => { if(e.key==='Escape') closeLightbox(); });
+function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+</script>
+</body>
+</html>
