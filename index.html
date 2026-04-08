@@ -5,31 +5,33 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Archaia — Artifact Browser</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300;1,8..60,400&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <style>
 :root {
-  --bg:        #F6F2EB;
-  --surface:   #FFFFFF;
-  --surface2:  #F0EAE0;
-  --border:    #DDD5C5;
-  --border2:   #C5B89E;
-  --text:      #18100A;
-  --text2:     #3E3020;
-  --text3:     #897560;
-  --accent:    #7D3A10;
-  --accent-lt: #F5EBE0;
-  --gold:      #9A7228;
-  --gold-lt:   #FDF6E3;
-  --gpt:       #1A6535;
-  --gpt-lt:    #E8F5EE;
-  --gemini:    #1848A0;
-  --gemini-lt: #E8EFFA;
-  --groq:      #6E3090;
-  --groq-lt:   #F2EAF8;
-  --uses-bg:   #FBF6EE;
+  --bg:          #F6F2EB;
+  --surface:     #FFFFFF;
+  --surface2:    #F0EAE0;
+  --border:      #DDD5C5;
+  --border2:     #C5B89E;
+  --text:        #18100A;
+  --text2:       #3E3020;
+  --text3:       #897560;
+  --accent:      #7D3A10;
+  --accent-lt:   #F5EBE0;
+  --gold:        #9A7228;
+  --gold-lt:     #FDF6E3;
+  --gpt:         #1A6535;
+  --gpt-lt:      #E8F5EE;
+  --gemini:      #1848A0;
+  --gemini-lt:   #E8EFFA;
+  --v4:          #0B5563;
+  --v4-lt:       #E3F2F5;
+  --v1:          #6B2D6B;
+  --v1-lt:       #F5E8F5;
+  --uses-bg:     #FBF6EE;
   --uses-border: #D4C4A8;
-  --r:         6px;
-  --sidebar:   280px;
+  --r:           6px;
+  --sidebar:     280px;
 }
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 html, body { height: 100%; overflow: hidden; }
@@ -41,36 +43,44 @@ header {
   height: 58px; background: var(--surface); border-bottom: 2px solid var(--border);
   display: flex; align-items: center; justify-content: space-between; padding: 0 1.75rem;
 }
-.logo { display: flex; align-items: baseline; gap: 0.65rem; }
-.logo-name { font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; font-weight: 700; letter-spacing: 0.14em; color: var(--accent); text-transform: uppercase; }
+.logo { display: flex; align-items: baseline; gap: 0.65rem; cursor: pointer; }
+.logo:hover .logo-name { opacity: 0.8; }
+.logo-name { font-family: 'Cormorant Garamond', serif; font-size: 1.55rem; font-weight: 700; letter-spacing: 0.14em; color: var(--accent); text-transform: uppercase; transition: opacity 0.15s; }
 .logo-div { color: var(--border2); font-size: 1.1rem; }
 .logo-sub { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-style: italic; color: var(--text3); }
 .hright { display: flex; align-items: center; gap: 1.2rem; }
 #hstats { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; color: var(--text3); text-align: right; line-height: 1.9; }
-.about-btn { padding: 0.4rem 1.1rem; background: transparent; color: var(--accent); border: 1px solid var(--accent); border-radius: var(--r); font-family: 'Source Serif 4', serif; font-size: 0.88rem; cursor: pointer; transition: all 0.15s; }
-.about-btn:hover { background: var(--accent-lt); }
+.about-btn { padding: 0.38rem 1rem; background: transparent; color: var(--text3); border: 1px solid var(--border2); border-radius: var(--r); font-family: 'JetBrains Mono', monospace; font-size: 0.68rem; letter-spacing: 0.06em; cursor: pointer; transition: all 0.15s; text-transform: uppercase; }
+.about-btn:hover { color: var(--accent); border-color: var(--accent); background: var(--accent-lt); }
 
 /* ── LAYOUT ── */
 .app { position: fixed; top: 58px; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: var(--sidebar) 1fr; }
 
 /* ── SIDEBAR ── */
 .sidebar { background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
-.sidebar-top { padding: 1rem 1.1rem; border-bottom: 1px solid var(--border); flex-shrink: 0; }
-.slabel { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--text3); margin-bottom: 0.55rem; }
-.search { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: var(--r); padding: 0.4rem 0.75rem; font-family: 'Source Serif 4', serif; font-size: 0.9rem; color: var(--text); outline: none; transition: border-color 0.15s; }
+.sidebar-top { padding: 0.9rem 1.1rem; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.slabel { font-family: 'JetBrains Mono', monospace; font-size: 0.56rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--text3); margin-bottom: 0.5rem; }
+.search { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: var(--r); padding: 0.38rem 0.75rem; font-family: 'Source Serif 4', serif; font-size: 0.9rem; color: var(--text); outline: none; transition: border-color 0.15s; }
 .search:focus { border-color: var(--accent); }
 .search::placeholder { color: var(--text3); }
+.sidebar-filters { display: flex; gap: 0.3rem; margin-top: 0.55rem; }
+.sf-chip { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; padding: 0.2em 0.6em; border-radius: 3px; border: 1px solid var(--border); background: transparent; color: var(--text3); cursor: pointer; transition: all 0.12s; text-transform: uppercase; letter-spacing: 0.04em; }
+.sf-chip:hover { border-color: var(--text3); color: var(--text2); }
+.sf-chip.sf-active { background: var(--accent); border-color: var(--accent); color: white; }
+.sf-chip.sf-uses { }
+.sf-chip.sf-uses.sf-active { background: var(--accent); }
+
 .art-list { flex: 1; overflow-y: auto; padding: 0.4rem 0; }
 .art-list::-webkit-scrollbar { width: 4px; }
 .art-list::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
-.art-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 1.1rem; cursor: pointer; border-left: 3px solid transparent; transition: all 0.12s; position: relative; }
+.art-item { display: flex; align-items: center; gap: 0.75rem; padding: 0.6rem 1.1rem; cursor: pointer; border-left: 3px solid transparent; transition: all 0.12s; }
 .art-item:hover { background: var(--surface2); }
 .art-item.active { border-left-color: var(--accent); background: var(--accent-lt); }
-.art-thumb { width: 42px; height: 42px; flex-shrink: 0; border-radius: 4px; border: 1px solid var(--border); overflow: hidden; background: var(--surface2); display: flex; align-items: center; justify-content: center; font-size: 1.1rem; color: var(--text3); }
+.art-thumb { width: 42px; height: 42px; flex-shrink: 0; border-radius: 4px; border: 1px solid var(--border); overflow: hidden; background: var(--surface2); display: flex; align-items: center; justify-content: center; color: var(--text3); }
 .art-thumb img { width: 100%; height: 100%; object-fit: cover; }
 .art-info { min-width: 0; flex: 1; }
 .art-name { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.art-proj { font-size: 0.74rem; color: var(--text3); font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.art-proj { font-size: 0.73rem; color: var(--text3); font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .uses-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
 
 /* ── MAIN ── */
@@ -78,204 +88,385 @@ header {
 .main::-webkit-scrollbar { width: 5px; }
 .main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-/* ── LANDING PAGE ── */
-.landing {
-  min-height: 100%;
-  padding: 4rem 5rem 6rem;
-  display: flex;
-  flex-direction: column;
-  gap: 4rem;
-  animation: fadeIn 0.4s ease;
+/* ══════════════════════════════════════════════════
+   LANDING PAGE
+══════════════════════════════════════════════════ */
+.landing { min-height: 100%; background: var(--bg); }
+
+/* Hero */
+.l-hero {
+  position: relative;
+  overflow: hidden;
+  padding: 5rem 5rem 4rem;
+  border-bottom: 1px solid var(--border);
 }
-.landing-hero {
-  display: flex;
-  flex-direction: column;
-  gap: 1.2rem;
-  max-width: 720px;
+.l-hero-grid {
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(var(--border) 1px, transparent 1px),
+    linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 40px 40px;
+  opacity: 0.4;
+  mask-image: radial-gradient(ellipse 80% 100% at 50% 0%, black 40%, transparent 100%);
 }
-.landing-eyebrow {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.62rem;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: var(--text3);
-}
-.landing-title {
+.l-hero-num {
+  position: absolute;
+  right: 4rem; top: 50%;
+  transform: translateY(-50%);
   font-family: 'Cormorant Garamond', serif;
-  font-size: 3.8rem;
-  font-weight: 700;
-  line-height: 1.04;
-  color: var(--text);
+  font-size: 14rem;
+  font-weight: 300;
+  line-height: 1;
+  color: var(--border2);
+  opacity: 0.35;
+  user-select: none;
+  letter-spacing: -0.04em;
 }
-.landing-title em { color: var(--accent); font-style: italic; }
-.landing-desc {
-  font-size: 1.05rem;
+.l-hero-content { position: relative; z-index: 1; max-width: 620px; }
+.l-pre {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.6rem;
+  text-transform: uppercase;
+  letter-spacing: 0.22em;
+  color: var(--accent);
+  margin-bottom: 1.4rem;
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.l-pre::before {
+  content: '';
+  display: inline-block;
+  width: 28px;
+  height: 1px;
+  background: var(--accent);
+}
+.l-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 4.2rem;
+  font-weight: 700;
+  line-height: 1.0;
+  color: var(--text);
+  margin-bottom: 1.6rem;
+  letter-spacing: -0.01em;
+}
+.l-title span { color: var(--accent); font-style: italic; }
+.l-body {
+  font-size: 1rem;
   line-height: 1.8;
   color: var(--text2);
-  max-width: 580px;
+  max-width: 500px;
+  margin-bottom: 2.2rem;
 }
-.landing-stats {
+.l-stats {
   display: flex;
-  gap: 3rem;
-  margin-top: 0.5rem;
+  gap: 0;
+  margin-bottom: 2.4rem;
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+  background: var(--surface);
+  width: fit-content;
 }
-.lstat { display: flex; flex-direction: column; gap: 0.2rem; }
-.lstat-n {
+.l-stat {
+  padding: 0.9rem 1.6rem;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+  min-width: 100px;
+}
+.l-stat:last-child { border-right: none; }
+.l-stat-n {
   font-family: 'Cormorant Garamond', serif;
-  font-size: 2.4rem;
+  font-size: 2rem;
   font-weight: 700;
   color: var(--accent);
   line-height: 1;
 }
-.lstat-l {
+.l-stat-l {
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.58rem;
+  font-size: 0.52rem;
   text-transform: uppercase;
-  letter-spacing: 0.14em;
+  letter-spacing: 0.12em;
   color: var(--text3);
 }
-.landing-cta {
+.l-cta {
   display: inline-flex;
   align-items: center;
-  gap: 0.6rem;
-  margin-top: 0.5rem;
-  padding: 0.7rem 1.8rem;
+  gap: 0.5rem;
+  padding: 0.75rem 2rem;
   background: var(--accent);
   color: white;
   border: none;
   border-radius: var(--r);
   font-family: 'Cormorant Garamond', serif;
-  font-size: 1.15rem;
+  font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
-  transition: background 0.15s;
-  width: fit-content;
+  transition: background 0.15s, transform 0.12s;
+  letter-spacing: 0.02em;
 }
-.landing-cta:hover { background: #9a4a18; }
+.l-cta:hover { background: #9a4a18; transform: translateY(-1px); }
+.l-cta svg { width: 14px; height: 14px; }
 
-/* feature cards */
-.landing-section-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.6rem;
-  font-weight: 700;
-  color: var(--text);
-  margin-bottom: 1.4rem;
-  padding-bottom: 0.7rem;
-  border-bottom: 1px solid var(--border);
+/* Sections */
+.l-body-wrap { padding: 4rem 5rem; display: flex; flex-direction: column; gap: 4rem; }
+.l-section-head {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  color: var(--text3);
+  margin-bottom: 1.6rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
 }
-.feature-grid {
+.l-section-head::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+
+/* Feature list */
+.l-features { display: flex; flex-direction: column; gap: 0; }
+.l-feat {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-  gap: 1.2rem;
+  grid-template-columns: 2.4rem 1fr;
+  gap: 0 1.2rem;
+  padding: 1.1rem 0;
+  border-bottom: 1px solid var(--border);
+  align-items: start;
 }
-.feature-card {
+.l-feat:first-child { border-top: 1px solid var(--border); }
+.l-feat-num {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.4rem;
+  font-weight: 300;
+  color: var(--border2);
+  line-height: 1.3;
+  text-align: right;
+}
+.l-feat-content { }
+.l-feat-title {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.25rem;
+}
+.l-feat-desc { font-size: 0.9rem; line-height: 1.7; color: var(--text2); }
+
+/* Badge glossary */
+.l-badge-grid { display: flex; flex-direction: column; gap: 0.8rem; }
+.l-badge-row {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 1.2rem;
+  align-items: start;
+  padding: 1rem 1.2rem;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r);
-  padding: 1.4rem 1.6rem;
+}
+.l-badge-sample {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  padding: 0.28em 0.7em;
+  border-radius: 3px;
+  width: fit-content;
+  white-space: nowrap;
+}
+.lbs-v4    { border: 1px solid var(--v4);    color: var(--v4);    background: var(--v4-lt); }
+.lbs-v1    { border: 1px solid var(--v1);    color: var(--v1);    background: var(--v1-lt); }
+.lbs-uses  { border: 1px solid var(--gold);  color: var(--gold);  background: var(--gold-lt); }
+.lbs-oc    { border: 1px solid var(--gemini);color: var(--gemini);background: var(--gemini-lt); }
+.lbs-dot   { display: flex; align-items: center; gap: 0.5rem; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; color: var(--text3); }
+.lbs-dot-c { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
+.l-badge-desc { font-size: 0.88rem; line-height: 1.7; color: var(--text2); }
+.l-badge-desc strong { color: var(--text); font-weight: 600; }
+
+/* Dataset box */
+.l-dataset-box {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--r);
+  overflow: hidden;
+}
+.l-dataset-header {
+  background: var(--text);
+  padding: 0.7rem 1.4rem;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: rgba(255,255,255,0.6);
   display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
+  align-items: center;
+  justify-content: space-between;
 }
-.fc-icon {
-  font-size: 1.5rem;
-  line-height: 1;
+.l-dataset-rows { padding: 1rem 0; }
+.l-dataset-row {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 0.5rem 1.5rem;
+  padding: 0.45rem 1.4rem;
+  align-items: center;
 }
-.fc-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.15rem;
-  font-weight: 700;
+.l-dataset-row:hover { background: var(--surface2); }
+.l-dk {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.62rem;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
+.l-dv {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.72rem;
   color: var(--text);
+  word-break: break-all;
 }
-.fc-desc {
-  font-size: 0.88rem;
-  line-height: 1.7;
-  color: var(--text2);
+.l-dv a {
+  color: var(--gemini);
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.12s;
+}
+.l-dv a:hover { border-color: var(--gemini); }
+.l-dv-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.2em 0.6em;
+  border-radius: 3px;
+  font-size: 0.6rem;
+  background: var(--v4-lt);
+  color: var(--v4);
+  border: 1px solid var(--v4);
 }
 
-/* dataset badges explained */
-.badge-explain {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-.be-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 1.2rem;
+/* Models */
+.l-model-row { display: flex; gap: 1rem; flex-wrap: wrap; }
+.l-model-card {
+  flex: 1; min-width: 220px;
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--r);
   padding: 1.2rem 1.4rem;
 }
-.be-badge {
+.l-model-tag {
+  display: inline-block;
   font-family: 'JetBrains Mono', monospace;
-  font-size: 0.7rem;
-  padding: 0.3em 0.8em;
+  font-size: 0.65rem;
+  padding: 0.2em 0.7em;
   border-radius: 3px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-.be-v4 { border: 1px solid #1A6535; color: #1A6535; background: #E8F5EE; }
-.be-v1 { border: 1px solid #8A6020; color: #8A6020; background: #FDF3E0; }
-.be-uses { border: 1px solid var(--gold); color: var(--gold); background: var(--gold-lt); }
-.be-dot { display: flex; align-items: center; gap: 0.4rem; font-family: 'JetBrains Mono', monospace; font-size: 0.7rem; color: var(--text3); white-space: nowrap; flex-shrink: 0; }
-.be-dot-circle { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); }
-.be-text { font-size: 0.9rem; line-height: 1.65; color: var(--text2); }
-.be-text strong { color: var(--text); font-weight: 600; }
-
-/* model legend */
-.model-grid {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-}
-.model-card {
-  flex: 1;
-  min-width: 200px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 1.1rem 1.3rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-}
-.mc-tag {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.68rem;
-  padding: 0.2em 0.6em;
-  border-radius: 3px;
+  margin-bottom: 0.7rem;
   font-weight: 500;
-  width: fit-content;
 }
-.mc-gpt    { background: var(--gpt);    color: white; }
-.mc-gemini { background: var(--gemini); color: white; }
-.mc-desc   { font-size: 0.85rem; line-height: 1.6; color: var(--text2); }
+.lmt-gpt    { background: var(--gpt);    color: white; }
+.lmt-gemini { background: var(--gemini); color: white; }
+.l-model-desc { font-size: 0.88rem; line-height: 1.65; color: var(--text2); }
 
-.landing-footer {
+/* Prompt modes table */
+.l-prompt-table { width: 100%; border-collapse: collapse; }
+.l-prompt-table th {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.56rem;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--text3);
+  text-align: left;
+  padding: 0.6rem 1rem;
+  border-bottom: 2px solid var(--border);
+  background: var(--surface);
+}
+.l-prompt-table td {
+  padding: 0.7rem 1rem;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.88rem;
+  color: var(--text2);
+  vertical-align: top;
+  background: var(--surface);
+}
+.l-prompt-table tr:last-child td { border-bottom: none; }
+.l-prompt-table tr:hover td { background: var(--surface2); }
+.l-prompt-name {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Footer */
+.l-footer {
+  padding: 2rem 5rem;
+  border-top: 1px solid var(--border);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.l-footer-left {
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.58rem;
+  color: var(--text3);
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  line-height: 1.8;
+}
+.l-footer-right {
+  font-family: 'Cormorant Garamond', serif;
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: var(--border);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ══════════════════════════════════════════════════
+   DETAIL VIEW
+══════════════════════════════════════════════════ */
+.detail { padding: 2.2rem 2.8rem 5rem; animation: fadeIn 0.22s ease; }
+@keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
+
+.det-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--text3); margin-bottom: 0.35rem; }
+.det-title { font-family: 'Cormorant Garamond', serif; font-size: 2.6rem; font-weight: 700; line-height: 1.08; margin-bottom: 1rem; color: var(--text); }
+
+/* OC link bar */
+.oc-bar {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  margin-bottom: 1rem;
+}
+.oc-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.38rem 0.9rem;
+  background: var(--gemini-lt);
+  border: 1px solid var(--gemini);
+  border-radius: var(--r);
+  color: var(--gemini);
+  text-decoration: none;
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 0.65rem;
+  font-weight: 500;
+  transition: all 0.15s;
+  letter-spacing: 0.04em;
+}
+.oc-link:hover { background: #d0ddef; }
+.oc-link svg { width: 11px; height: 11px; flex-shrink: 0; }
+.oc-uuid {
   font-family: 'JetBrains Mono', monospace;
   font-size: 0.6rem;
   color: var(--text3);
-  letter-spacing: 0.1em;
-  padding-top: 2rem;
-  border-top: 1px solid var(--border);
+  letter-spacing: 0.04em;
 }
 
-/* ── DETAIL ── */
-.detail { padding: 2.2rem 2.8rem 5rem; animation: fadeIn 0.22s ease; }
-@keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
-.det-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--text3); margin-bottom: 0.35rem; }
-.det-title { font-family: 'Cormorant Garamond', serif; font-size: 2.6rem; font-weight: 700; line-height: 1.08; margin-bottom: 0.75rem; color: var(--text); }
-
-.badges { display: flex; gap: 0.45rem; flex-wrap: wrap; margin-bottom: 1.8rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); align-items: center; }
+.badges { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.8rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); align-items: center; }
 .badge { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; padding: 0.22em 0.65em; border-radius: 3px; border: 1px solid var(--border2); color: var(--text3); background: var(--surface2); }
 .badge-project { border-color: var(--accent); color: var(--accent); background: var(--accent-lt); }
 .badge-uses { border-color: var(--gold); color: var(--gold); background: var(--gold-lt); font-weight: 500; }
-.badge-v4 { border-color: #1A6535; color: #1A6535; background: #E8F5EE; }
-.badge-v1 { border-color: #8A6020; color: #8A6020; background: #FDF3E0; }
-.badge-oc { border-color: var(--gemini); color: var(--gemini); background: var(--gemini-lt); cursor: pointer; text-decoration: none; display: inline-flex; align-items: center; gap: 0.3em; transition: background 0.12s; }
-.badge-oc:hover { background: #D0DCEF; }
+.badge-v4 { border-color: var(--v4); color: var(--v4); background: var(--v4-lt); }
+.badge-v1 { border-color: var(--v1); color: var(--v1); background: var(--v1-lt); }
 
 .img-section { margin-bottom: 2rem; }
 .img-section-title { font-family: 'JetBrains Mono', monospace; font-size: 0.57rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text3); margin-bottom: 0.9rem; }
@@ -288,9 +479,9 @@ header {
 .meta-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 1.2rem 1.4rem; }
 .meta-card-title { font-family: 'JetBrains Mono', monospace; font-size: 0.57rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text3); margin-bottom: 0.9rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border); }
 .meta-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.3rem 1.5rem; margin-bottom: 0.5rem; }
-.mrow { font-size: 0.87rem; line-height: 1.6; }
+.mrow { font-size: 0.87rem; line-height: 1.6; overflow: hidden; }
 .mk { color: var(--text3); font-style: italic; }
-.mv { color: var(--text2); }
+.mv { color: var(--text2); word-break: break-word; }
 .mlong { grid-column: 1/-1; margin-top: 0.5rem; padding-top: 0.5rem; border-top: 1px solid var(--border); }
 .mlong .mk { display: block; margin-bottom: 0.2rem; }
 .mlong .mv { display: block; color: var(--text); font-size: 0.9rem; line-height: 1.7; }
@@ -299,7 +490,7 @@ header {
 .extra-toggle:hover { color: var(--text2); }
 .extra-toggle .earrow { transition: transform 0.15s; display: inline-block; }
 .extra-toggle.open .earrow { transform: rotate(90deg); }
-.extra-grid { display: none; margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px dashed var(--border); grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.3rem 1.5rem; }
+.extra-grid { display: none; margin-top: 0.8rem; padding-top: 0.8rem; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.3rem 1.5rem; }
 .extra-grid.open { display: grid; }
 
 .uses-section { background: var(--uses-bg); border: 1px solid var(--uses-border); border-radius: var(--r); padding: 1.8rem 2rem; margin-bottom: 2rem; }
@@ -315,7 +506,6 @@ header {
 .chip:hover { border-color: var(--text2); color: var(--text2); }
 .on-gpt    { background: var(--gpt-lt);    border-color: var(--gpt)!important;    color: var(--gpt)!important; }
 .on-gemini { background: var(--gemini-lt); border-color: var(--gemini)!important; color: var(--gemini)!important; }
-.on-groq   { background: var(--groq-lt);   border-color: var(--groq)!important;   color: var(--groq)!important; }
 .on-mode   { background: var(--accent-lt); border-color: var(--accent)!important; color: var(--accent)!important; }
 .on-prompt { background: var(--gold-lt);   border-color: var(--gold)!important;   color: var(--gold)!important; }
 .vdiv { width: 1px; background: var(--border); align-self: stretch; }
@@ -329,11 +519,9 @@ header {
 .chead { padding: 0.65rem 1.1rem; display: flex; align-items: center; gap: 0.45rem; border-bottom: 1px solid var(--border); flex-wrap: wrap; }
 .chead.h-gpt    { background: var(--gpt-lt); }
 .chead.h-gemini { background: var(--gemini-lt); }
-.chead.h-groq   { background: var(--groq-lt); }
 .tag { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; padding: 0.18em 0.6em; border-radius: 3px; font-weight: 500; }
 .t-gpt    { background: var(--gpt);    color: white; }
 .t-gemini { background: var(--gemini); color: white; }
-.t-groq   { background: var(--groq);   color: white; }
 .t-mode   { background: var(--surface2); color: var(--text2); border: 1px solid var(--border); }
 .t-prompt { background: var(--gold-lt); color: var(--gold); border: 1px solid #E0C878; }
 .cbody { padding: 1.4rem 1.5rem; }
@@ -346,7 +534,6 @@ header {
 .ctext { font-size: 0.94rem; line-height: 1.82; color: var(--text2); }
 .ctext strong { color: var(--text); font-weight: 600; }
 .ctext.is-error { color: #B03020; font-style: italic; font-size: 0.84rem; }
-.ctext.is-skip  { color: var(--text3); font-style: italic; }
 .no-combos { grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text3); font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; }
 .no-uses-notice { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--r); padding: 1.4rem 1.6rem; color: var(--text3); font-style: italic; font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem; }
 
@@ -362,13 +549,13 @@ header {
 </div>
 
 <header>
-  <div class="logo">
+  <div class="logo" onclick="showLanding()">
     <span class="logo-name">Archaia</span>
     <span class="logo-div">·</span>
-    <span class="logo-sub">Artifact Browser & Use Generation Study</span>
+    <span class="logo-sub">Artifact Browser</span>
   </div>
   <div class="hright">
-    <div id="hstats">Loading…</div>
+    <div id="hstats">Loading&hellip;</div>
     <button class="about-btn" onclick="showLanding()">About</button>
   </div>
 </header>
@@ -377,24 +564,32 @@ header {
   <aside class="sidebar">
     <div class="sidebar-top">
       <div class="slabel">Artifacts</div>
-      <input class="search" id="search" type="text" placeholder="Filter by name or project…">
+      <input class="search" id="search" type="text" placeholder="Filter by name or project&hellip;">
+      <div class="sidebar-filters" id="sf">
+        <button class="sf-chip sf-active" data-f="all">All</button>
+        <button class="sf-chip" data-f="uses">
+          <span style="display:inline-flex;align-items:center;gap:0.3rem">
+            <span style="width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block"></span>
+            With uses
+          </span>
+        </button>
+        <button class="sf-chip" data-f="no-uses">No uses</button>
+      </div>
     </div>
     <div class="art-list" id="art-list">
-      <div style="padding:1.5rem;color:var(--text3);font-style:italic;font-size:0.88rem;text-align:center">Loading dataset…</div>
+      <div style="padding:1.5rem;color:var(--text3);font-style:italic;font-size:0.88rem;text-align:center">Loading&hellip;</div>
     </div>
   </aside>
 
-  <main class="main" id="main">
-    <!-- landing renders here on load, then detail view takes over -->
-  </main>
+  <main class="main" id="main"></main>
 </div>
 
 <script>
-let DATA = null, cur = 0, STATS = {};
+let DATA = null, cur = 0, STATS = {}, SF = 'all';
 let F = { models: new Set(), modes: new Set(), prompts: new Set() };
 
 const PROMPT_TEXTS = {
-  archaeological: `You are writing a use-hypothesis section for an archaeological site report.
+  archaeological:`You are writing a use-hypothesis section for an archaeological site report.
 Based on the artifact data provided, produce:
 1. One sentence identifying the artifact and its key physical characteristics
 2. Three to five numbered use hypotheses, each with:
@@ -402,27 +597,24 @@ Based on the artifact data provided, produce:
    - Evidence from the provided data that supports it
    - A confidence level (high / medium / low)
 3. A one-sentence note on what additional evidence would strengthen or refute the leading hypothesis
-
 Use precise academic language. Hedge all claims appropriately. Do not invent facts not in the data. Under 320 words.`,
-  museum_label: `You are writing interpretive content for a museum exhibit on ancient material culture.
+  museum_label:`You are writing interpretive content for a museum exhibit on ancient material culture.
 Based on the artifact data provided, write:
 1. A short engaging title for this artifact (max 6 words)
 2. A 2-3 sentence description for a general adult audience — vivid, concrete, no jargon
 3. A section called "How might this have been used?" with 3-4 plausible uses as short accessible sentences
 4. One sentence connecting this object to a universal human experience
-
 Make it engaging and human. Be honest about uncertainty. Under 280 words.`,
-  generative: `You are reconstructing the human story behind an archaeological artifact.
+  generative:`You are reconstructing the human story behind an archaeological artifact.
 Based on the data provided, write a short first-person narrative (150-200 words) imagining:
 - Who likely owned or used this object
 - What they used it for, based specifically on the physical evidence provided
 - How and why it ended up in the archaeological context where it was found
-
 Then add 2-3 bullet points labeling which specific data fields informed each element of your story.
 Flag any detail you invented without evidence.`
 };
 
-const ML = m => m.includes('gpt') ? 'GPT-4o-mini' : m.includes('gemini') ? 'Gemini Flash Lite' : 'Llama 3.3 70B';
+const ML = m => m.includes('gpt') ? 'GPT-4o-mini' : m.includes('gemini') ? 'Gemini Flash Lite' : 'Llama 3.3';
 const MC = m => m.includes('gpt') ? 'gpt' : m.includes('gemini') ? 'gemini' : 'groq';
 const PL = { archaeological:'Archaeological', museum_label:'Museum Label', generative:'Generative' };
 const IL = { sparse:'Sparse', full_and_images:'Full + Images' };
@@ -459,9 +651,24 @@ const LONG_KEYS = new Set([
   'recovered_description_remarks','recovered_text_fields_json','metadata','geometry'
 ]);
 
+function isBytesVal(v) {
+  const s = String(v).trim();
+  return s.startsWith("b'") || s.startsWith('b"') || s.startsWith("b'\\x") || /^b'\\x/.test(s);
+}
+
+function dedupeImgs(imgs) {
+  const seen = new Set();
+  return (imgs || []).filter(src => {
+    const key = src.slice(-80);
+    if (seen.has(key)) return false;
+    seen.add(key);
+    return true;
+  });
+}
+
 fetch('./combined_data.json').then(r => r.json()).then(init).catch(e => {
-  document.getElementById('main').innerHTML = `<div style="padding:3rem;color:var(--text3);font-style:italic">Failed to load dataset: ${e.message}</div>`;
-  document.getElementById('art-list').innerHTML = `<div style="padding:1.5rem;color:var(--text3);font-style:italic;font-size:0.88rem;text-align:center">Failed to load</div>`;
+  document.getElementById('main').innerHTML = `<div style="padding:3rem;color:var(--text3);font-style:italic;text-align:center">Failed to load combined_data.json<br><span style="font-family:JetBrains Mono,monospace;font-size:0.75rem">${e.message}</span></div>`;
+  document.getElementById('art-list').innerHTML = `<div style="padding:1.5rem;color:var(--text3);font-style:italic;font-size:0.88rem;text-align:center">No data</div>`;
 });
 
 function init(data) {
@@ -471,159 +678,52 @@ function init(data) {
   const models = [...new Set(matrix.map(c => c.model))];
   F = {
     models:  new Set(models),
-    modes:   new Set([...new Set(matrix.map(c => c.input_mode))]),
-    prompts: new Set([...new Set(matrix.map(c => c.prompt_style))]),
+    modes:   new Set(matrix.map(c => c.input_mode)),
+    prompts: new Set(matrix.map(c => c.prompt_style)),
   };
   STATS = data.stats || {};
+  const projs = new Set(arts.map(a => a.project)).size;
   document.getElementById('hstats').innerHTML =
-    `${arts.length} artifacts · ${STATS.with_llm||0} with generated uses<br>${models.map(ML).join(' · ')}`;
+    `${arts.length} artifacts &middot; ${STATS.with_llm||0} with AI uses<br>${models.map(ML).join(' &middot; ')}`;
   renderSidebar(arts);
-  showLanding();
+  showLanding(arts, projs, models);
+  setupSidebarFilters();
 }
 
-// ── LANDING ────────────────────────────────────────────────────────────────
-function showLanding() {
-  const arts = DATA ? DATA.artifacts : [];
-  const matrix = DATA ? (DATA.ablation_matrix || []) : [];
-  const models = [...new Set(matrix.map(c => c.model))];
-  const projects = DATA ? [...new Set(arts.map(a => a.project))].length : '—';
-
-  document.getElementById('main').innerHTML = `
-  <div class="landing">
-
-    <div class="landing-hero">
-      <div class="landing-eyebrow">ArchAIa · CMU LTI × J&amp;J MedTech</div>
-      <div class="landing-title">Archaeological<br>artifacts, <em>reimagined</em><br>with AI.</div>
-      <div class="landing-desc">
-        This browser presents a curated sample of artifacts from the OpenContext archaeological database,
-        enriched with recovered metadata and AI-generated use hypotheses across multiple models,
-        prompt styles, and input modes.
-      </div>
-      <div class="landing-stats">
-        <div class="lstat"><div class="lstat-n">${arts.length || '—'}</div><div class="lstat-l">Artifacts</div></div>
-        <div class="lstat"><div class="lstat-n">${STATS.with_llm || '—'}</div><div class="lstat-l">With AI uses</div></div>
-        <div class="lstat"><div class="lstat-n">${projects}</div><div class="lstat-l">Projects</div></div>
-        <div class="lstat"><div class="lstat-n">${models.length || '—'}</div><div class="lstat-l">AI models</div></div>
-      </div>
-      <button class="landing-cta" onclick="if(DATA&&DATA.artifacts.length)selectArt(0)">
-        Browse artifacts →
-      </button>
-    </div>
-
-    <div>
-      <div class="landing-section-title">How to use this browser</div>
-      <div class="feature-grid">
-        <div class="feature-card">
-          <div class="fc-icon">𓏢</div>
-          <div class="fc-title">Browse the sidebar</div>
-          <div class="fc-desc">Scroll through all artifacts on the left. Click any item to open its full record — images, metadata, and AI outputs if available.</div>
-        </div>
-        <div class="feature-card">
-          <div class="fc-icon">⬤</div>
-          <div class="fc-title">Orange dot = AI uses</div>
-          <div class="fc-desc">Artifacts marked with an orange dot in the sidebar have AI-generated use hypotheses. These are a selected subset of archaeologically interesting artifacts.</div>
-        </div>
-        <div class="feature-card">
-          <div class="fc-icon">🔍</div>
-          <div class="fc-title">Filter by name or project</div>
-          <div class="fc-desc">Use the search box at the top of the sidebar to filter artifacts by label or excavation project name.</div>
-        </div>
-        <div class="feature-card">
-          <div class="fc-icon">↗</div>
-          <div class="fc-title">Open in OpenContext</div>
-          <div class="fc-desc">Every artifact with a UUID shows a direct link to its full OpenContext record. Click the blue UUID badge to open it in a new tab for sanity checking.</div>
-        </div>
-        <div class="feature-card">
-          <div class="fc-icon">🎛</div>
-          <div class="fc-title">Filter AI outputs</div>
-          <div class="fc-desc">For artifacts with generated uses, filter by model, input mode (sparse vs full+images), and prompt style to compare outputs side by side.</div>
-        </div>
-        <div class="feature-card">
-          <div class="fc-icon">🖼</div>
-          <div class="fc-title">Click images to enlarge</div>
-          <div class="fc-desc">Any artifact image can be clicked to open a full-screen lightbox. Press Escape to close.</div>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <div class="landing-section-title">Understanding the badges</div>
-      <div class="badge-explain">
-        <div class="be-row">
-          <span class="be-badge be-v4">v4 · location + date verified</span>
-          <div class="be-text"><strong>Dataset v4</strong> — this artifact passed all upstream filters: it has at least one image, a verified geographic coordinate, and temporal data. It is part of the main cleaned dataset of 22,607 artifacts used for embedding and retrieval experiments.</div>
-        </div>
-        <div class="be-row">
-          <span class="be-badge be-v1">v1 · no location / date</span>
-          <div class="be-text"><strong>Dataset v1 only</strong> — this artifact was selected by archaeologists as an object of interest, but it did not pass the location or date filter and is not in v4. It appears here only because it was included in the AI use generation study. Metadata may be incomplete.</div>
-        </div>
-        <div class="be-row">
-          <span class="be-badge be-uses">✦ Generated Uses Available</span>
-          <div class="be-text"><strong>AI use hypotheses</strong> — this artifact was part of a targeted study where multiple AI models were prompted to generate hypothetical uses based on the available metadata and images. These are not verified archaeological interpretations.</div>
-        </div>
-        <div class="be-row">
-          <div class="be-dot"><div class="be-dot-circle"></div> dot in sidebar</div>
-          <div class="be-text">The orange dot in the artifact list is a quick visual indicator that generated use hypotheses exist for that artifact. Scroll to find them or use the search to filter.</div>
-        </div>
-      </div>
-    </div>
-
-    <div>
-      <div class="landing-section-title">AI models used</div>
-      <div class="model-grid">
-        <div class="model-card">
-          <span class="mc-tag mc-gpt">GPT-4o-mini</span>
-          <div class="mc-desc">OpenAI's efficient multimodal model. Receives both text metadata and images in full+images mode.</div>
-        </div>
-        <div class="model-card">
-          <span class="mc-tag mc-gemini">Gemini Flash Lite</span>
-          <div class="mc-desc">Google's lightweight multimodal model. Also receives images in full+images mode alongside the full recovered metadata.</div>
-        </div>
-      </div>
-      <div style="margin-top:1rem;font-size:0.85rem;color:var(--text3);line-height:1.7;">
-        Each model was run with three prompt styles (<em>Archaeological</em>, <em>Museum Label</em>, <em>Generative narrative</em>) and two input modes (<em>Sparse</em> — key fields only, <em>Full + Images</em> — all recovered metadata plus up to 3 images). Use the filter chips on any artifact's uses section to compare across these dimensions.
-      </div>
-    </div>
-
-    <div>
-      <div class="landing-section-title">About the dataset</div>
-      <div style="font-size:0.92rem;line-height:1.85;color:var(--text2);max-width:680px;">
-        Artifacts are drawn from <strong>OpenContext</strong>, a peer-reviewed open-access publication platform for archaeological data.
-        The full pipeline processes 2.165M subject entities, filters to those with images, location, and date data,
-        recovers text fields from the graph-structured assertions layer, and produces a final dataset of 22,607 verified artifacts
-        across 15 artifact classes and 20+ excavation projects spanning the Middle East, Mediterranean, and beyond.
-        <br><br>
-        The sample shown here was stratified across projects and artifact classes for visual diversity.
-        Image-artifact associations were verified by tracing img2dataset output filenames back to their source TSV rows.
-      </div>
-    </div>
-
-    <div class="landing-footer">
-      ARCHAIA · CMU LTI · ArchAIa RA Project · April 2026 · Urmi Dedhia
-    </div>
-
-  </div>`;
+// ── SIDEBAR FILTERS ───────────────────────────────────────────────────────
+function setupSidebarFilters() {
+  document.getElementById('sf').addEventListener('click', e => {
+    const btn = e.target.closest('[data-f]'); if (!btn) return;
+    SF = btn.dataset.f;
+    document.querySelectorAll('.sf-chip').forEach(b => b.classList.toggle('sf-active', b.dataset.f === SF));
+    renderSidebar(DATA.artifacts, document.getElementById('search').value);
+  });
 }
 
-// ── SIDEBAR ────────────────────────────────────────────────────────────────
-function renderSidebar(arts, q='') {
+function renderSidebar(arts, q = '') {
   const list = document.getElementById('art-list');
-  const filtered = arts.filter(a =>
-    !q || a.name.toLowerCase().includes(q.toLowerCase()) ||
-    (a.project||'').toLowerCase().includes(q.toLowerCase())
-  );
+  let filtered = arts.filter(a => {
+    const matchQ = !q || a.name.toLowerCase().includes(q.toLowerCase()) ||
+      (a.project||'').toLowerCase().includes(q.toLowerCase());
+    const matchF = SF === 'all' ? true : SF === 'uses' ? a.has_llm : !a.has_llm;
+    return matchQ && matchF;
+  });
   list.innerHTML = filtered.length ? filtered.map(a => {
     const idx   = DATA.artifacts.indexOf(a);
-    const thumb = a.images && a.images.length ? a.images[0] : null;
+    const imgs  = dedupeImgs(a.images);
+    const thumb = imgs.length ? imgs[0] : null;
     return `<div class="art-item${idx===cur?' active':''}" onclick="selectArt(${idx})">
-      <div class="art-thumb">${thumb ? `<img src="${thumb}" onerror="this.parentNode.textContent='𓏢'">` : '𓏢'}</div>
+      <div class="art-thumb">${thumb
+        ? `<img src="${thumb}" onerror="this.parentNode.innerHTML='<svg viewBox=&quot;0 0 24 24&quot; fill=&quot;none&quot; stroke=&quot;currentColor&quot; stroke-width=&quot;1.5&quot; width=&quot;18&quot; height=&quot;18&quot;><rect x=&quot;3&quot; y=&quot;3&quot; width=&quot;18&quot; height=&quot;18&quot; rx=&quot;2&quot;/><circle cx=&quot;8.5&quot; cy=&quot;8.5&quot; r=&quot;1.5&quot;/><path d=&quot;M21 15l-5-5L5 21&quot;/></svg>'">`
+        : `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" width="18" height="18"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="M21 15l-5-5L5 21"/></svg>`
+      }</div>
       <div class="art-info">
         <div class="art-name">${esc(a.name)}</div>
         <div class="art-proj">${esc(a.project||'—')}</div>
       </div>
-      ${a.has_llm ? '<div class="uses-dot" title="Has generated use hypotheses"></div>' : ''}
+      ${a.has_llm ? '<div class="uses-dot" title="Has AI-generated use hypotheses"></div>' : ''}
     </div>`;
-  }).join('') : '<div style="padding:1.2rem;color:var(--text3);font-style:italic;text-align:center">No matches</div>';
+  }).join('') : `<div style="padding:1.2rem;color:var(--text3);font-style:italic;text-align:center;font-size:0.88rem">No matches</div>`;
 }
 
 function selectArt(idx) {
@@ -634,6 +734,199 @@ function selectArt(idx) {
 
 document.getElementById('search').addEventListener('input', e =>
   renderSidebar(DATA?.artifacts||[], e.target.value));
+
+// ── LANDING ────────────────────────────────────────────────────────────────
+function showLanding(arts, projs, models) {
+  arts   = arts   || (DATA ? DATA.artifacts : []);
+  projs  = projs  || (DATA ? new Set(arts.map(a => a.project)).size : '—');
+  models = models || (DATA ? [...new Set((DATA.ablation_matrix||[]).map(c => c.model))] : []);
+
+  document.getElementById('main').innerHTML = `
+<div class="landing">
+
+  <div class="l-hero">
+    <div class="l-hero-grid"></div>
+    <div class="l-hero-content">
+      <div class="l-pre">ArchAIa &middot; CMU Language Technologies Institute</div>
+      <div class="l-title">Archaeological<br>artifacts &amp;<br><span>AI-generated</span><br>use hypotheses.</div>
+      <div class="l-body">
+        A sample of ${arts.length || '—'} artifacts drawn from the OpenContext database,
+        with recovered metadata and AI-generated use hypotheses for a selected set of objects. 
+      </div>
+      <div class="l-stats">
+        <div class="l-stat"><div class="l-stat-n">${arts.length || '—'}</div><div class="l-stat-l">Artifacts</div></div>
+        <div class="l-stat"><div class="l-stat-n">${STATS.with_llm || '—'}</div><div class="l-stat-l">With AI uses</div></div>
+        <div class="l-stat"><div class="l-stat-n">${projs || '—'}</div><div class="l-stat-l">Projects</div></div>
+        <div class="l-stat"><div class="l-stat-n">${models.length || '—'}</div><div class="l-stat-l">AI models</div></div>
+      </div>
+      <button class="l-cta" onclick="if(DATA&&DATA.artifacts.length)selectArt(0)">
+        Enter the browser
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </button>
+    </div>
+  </div>
+
+  <div class="l-body-wrap">
+
+    <div>
+      <div class="l-section-head">Using this browser</div>
+      <div class="l-features">
+        <div class="l-feat">
+          <div class="l-feat-num">01</div>
+          <div class="l-feat-content">
+            <div class="l-feat-title">Browse the artifact list</div>
+            <div class="l-feat-desc">The sidebar lists all artifacts in the sample. Click any entry to open its full record. Use the search box to filter by name or excavation project. Use the filter chips to show only artifacts with AI-generated uses, or only those without.</div>
+          </div>
+        </div>
+        <div class="l-feat">
+          <div class="l-feat-num">02</div>
+          <div class="l-feat-content">
+            <div class="l-feat-title">Orange dot means AI uses are available</div>
+            <div class="l-feat-desc">Artifacts marked with an orange dot in the sidebar have AI-generated use hypotheses. These are a specific subset chosen for the study. The filter chip "With uses" isolates them quickly.</div>
+          </div>
+        </div>
+        <div class="l-feat">
+          <div class="l-feat-num">03</div>
+          <div class="l-feat-content">
+            <div class="l-feat-title">Open the record in OpenContext</div>
+            <div class="l-feat-desc">Every artifact with a UUID shows a "View on OpenContext" button directly below its title. Click it to open the full source record in a new tab for verification. The full UUID is shown alongside.</div>
+          </div>
+        </div>
+        <div class="l-feat">
+          <div class="l-feat-num">04</div>
+          <div class="l-feat-content">
+            <div class="l-feat-title">Compare AI outputs across models and prompts</div>
+            <div class="l-feat-desc">For artifacts with generated uses, use the filter chips to compare outputs by model (GPT-4o-mini vs Gemini Flash Lite), input mode (sparse metadata only vs full metadata plus images), and prompt style (archaeological report, museum label, or generative narrative).</div>
+          </div>
+        </div>
+        <div class="l-feat">
+          <div class="l-feat-num">05</div>
+          <div class="l-feat-content">
+            <div class="l-feat-title">Expand metadata and enlarge images</div>
+            <div class="l-feat-desc">Key fields are shown by default. Click "Show all fields" to see the complete recovered metadata including fabric, Munsell color, locus, and coordinates. Click any image to open it full-screen. Press Escape to close.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="l-section-head">Badge notation</div>
+      <div class="l-badge-grid">
+        <div class="l-badge-row">
+          <div><span class="l-badge-sample lbs-v4">v4 &middot; location + date verified</span></div>
+          <div class="l-badge-desc"><strong>Dataset v4</strong> &mdash; this artifact passed all upstream pipeline filters: it has at least one image, a verified geographic coordinate, and temporal data. It is part of the main cleaned dataset of 22,607 artifacts.</div>
+        </div>
+        <div class="l-badge-row">
+          <div><span class="l-badge-sample lbs-v1">v1 &middot; no location / date</span></div>
+          <div class="l-badge-desc"><strong>Dataset v1 only</strong> &mdash; this artifact was selected by the archaeologists as an object of interest but did not pass the location or date filter and is not in v4. It appears here because it was included in the AI use generation study. Metadata may be incomplete.</div>
+        </div>
+        <div class="l-badge-row">
+          <div><span class="l-badge-sample lbs-uses">&#10022; Generated Uses Available</span></div>
+          <div class="l-badge-desc"><strong>AI use hypotheses</strong> &mdash; AI-generated interpretations of the artifact's possible functions, produced by multiple models across different prompt styles and input modes. These are not verified archaeological claims.</div>
+        </div>
+        <div class="l-badge-row">
+          <div><span class="l-badge-sample lbs-oc">&#8599; View on OpenContext</span></div>
+          <div class="l-badge-desc"><strong>Source record</strong> &mdash; a direct link to the artifact's full record in OpenContext. Use this to verify metadata, check the original images, or cross-reference with the source database.</div>
+        </div>
+        <div class="l-badge-row">
+          <div><div class="lbs-dot"><div class="lbs-dot-c"></div> dot in sidebar</div></div>
+          <div class="l-badge-desc">The orange dot next to an artifact name in the sidebar indicates that AI-generated use hypotheses are available for that artifact.</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="l-section-head">Prompt configurations</div>
+      <table class="l-prompt-table">
+        <thead>
+          <tr>
+            <th style="width:180px">Style</th>
+            <th style="width:160px">Input mode</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><div class="l-prompt-name">Archaeological</div></td>
+            <td>Sparse &amp; Full+Images</td>
+            <td>Structured use-hypothesis section in the style of an archaeological site report. Produces numbered hypotheses with evidence and confidence levels.</td>
+          </tr>
+          <tr>
+            <td><div class="l-prompt-name">Museum Label</div></td>
+            <td>Sparse &amp; Full+Images</td>
+            <td>Interpretive text for a museum exhibit. Aimed at a general adult audience with accessible language and a connection to a universal human theme.</td>
+          </tr>
+          <tr>
+            <td><div class="l-prompt-name">Generative</div></td>
+            <td>Sparse &amp; Full+Images</td>
+            <td>A short first-person narrative imagining the owner and use of the object, followed by bullet points identifying which data fields informed each element of the story.</td>
+          </tr>
+        </tbody>
+      </table>
+      <div style="margin-top:0.9rem;font-size:0.85rem;color:var(--text3);line-height:1.7;">
+        <strong>Sparse</strong> mode provides only key fields (label, material, object type, size, condition, period, dates).
+        <strong>Full + Images</strong> mode provides all recovered metadata plus up to three images.
+      </div>
+    </div>
+
+    <div>
+      <div class="l-section-head">AI models</div>
+      <div class="l-model-row">
+        <div class="l-model-card">
+          <div class="l-model-tag lmt-gpt">GPT-4o-mini</div>
+          <div class="l-model-desc">OpenAI multimodal model. Receives text metadata and, in full+images mode, up to three artifact photographs encoded as base64.</div>
+        </div>
+        <div class="l-model-card">
+          <div class="l-model-tag lmt-gemini">Gemini Flash Lite</div>
+          <div class="l-model-desc">Google multimodal model. Also receives images in full+images mode alongside the complete recovered metadata JSON.</div>
+        </div>
+      </div>
+    </div>
+
+    <div>
+      <div class="l-section-head">Dataset access</div>
+      <div class="l-dataset-box">
+        <div class="l-dataset-header">
+          <span>OpenContext + ArchAIa Pipeline</span>
+          <span style="color:rgba(255,255,255,0.35)">v4</span>
+        </div>
+        <div class="l-dataset-rows">
+          <div class="l-dataset-row">
+            <div class="l-dk">Sample (v4, 100 artifacts)</div>
+            <div class="l-dv"><a href="https://huggingface.co/datasets/archaia/dataset_sample_100_v4" target="_blank" rel="noopener">huggingface.co/datasets/archaia/dataset_sample_100_v4</a></div>
+          </div>
+          <div class="l-dataset-row">
+            <div class="l-dk">Source</div>
+            <div class="l-dv"><a href="https://opencontext.org" target="_blank" rel="noopener">opencontext.org</a></div>
+          </div>
+          <div class="l-dataset-row">
+            <div class="l-dk">Artifacts (v4)</div>
+            <div class="l-dv">22,607 &middot; with image, location, and date</div>
+          </div>
+          <div class="l-dataset-row">
+            <div class="l-dk">Artifact classes</div>
+            <div class="l-dv">Object, Pottery, Coin, Architectural Element, Lithic, Animal Bone, and more</div>
+          </div>
+          <div class="l-dataset-row">
+            <div class="l-dk">Image mapping</div>
+            <div class="l-dv">Verified by tracing img2dataset filename indices back to source TSV rows</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <div class="l-footer">
+    <div class="l-footer-left">
+      ArchAIa &middot; CMU Language Technologies Institute<br>
+      April 2026
+    </div>
+    <div class="l-footer-right">Archaia</div>
+  </div>
+
+</div>`;
+}
 
 // ── DETAIL ─────────────────────────────────────────────────────────────────
 function show(idx) {
@@ -651,17 +944,13 @@ function show(idx) {
   const mat    = kf.recovered_material || '';
   const src    = a.dataset_source || 'v4';
 
-  // UUID badge — links to OpenContext
-  const uuid = ef.uuid_hex || kf.uuid_hex || '';
+  const uuid = (ef.uuid_hex || kf.uuid_hex || '').replace(/[^a-f0-9-]/gi, '');
   const ocUrl = uuid ? `https://opencontext.org/subjects/${uuid}` : '';
-  const uuidBadge = uuid
-    ? `<a class="badge badge-oc" href="${ocUrl}" target="_blank" rel="noopener" title="Open in OpenContext">↗ ${uuid.slice(0,8)}…</a>`
-    : '';
 
   const srcBadge = a.has_llm
     ? (src === 'v4'
-        ? `<span class="badge badge-v4" title="In v4 — has location and date data">v4 · location + date verified</span>`
-        : `<span class="badge badge-v1" title="Not in v4 — missing location or date. Used for LLM study only.">v1 · no location / date</span>`)
+        ? `<span class="badge badge-v4">v4 &middot; location + date verified</span>`
+        : `<span class="badge badge-v1">v1 &middot; no location / date</span>`)
     : '';
 
   const badgesH = [
@@ -669,11 +958,23 @@ function show(idx) {
     period   ? `<span class="badge">${esc(String(period).slice(0,40))}</span>` : '',
     mat      ? `<span class="badge">${esc(String(mat).slice(0,30))}</span>` : '',
     srcBadge,
-    uuidBadge,
-    a.has_llm ? `<span class="badge badge-uses">✦ Generated Uses Available</span>` : '',
+    a.has_llm ? `<span class="badge badge-uses">&#10022; Generated Uses Available</span>` : '',
   ].filter(Boolean).join('');
 
-  const imgs = a.images || [];
+  const ocBarH = uuid ? `
+    <div class="oc-bar">
+      <a class="oc-link" href="${ocUrl}" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M18 13v6a2 2 0 01-2 2H5a2 2 0 01-2-2V8a2 2 0 012-2h6"/>
+          <polyline points="15 3 21 3 21 9"/>
+          <line x1="10" y1="14" x2="21" y2="3"/>
+        </svg>
+        View on OpenContext
+      </a>
+      <span class="oc-uuid">${uuid}</span>
+    </div>` : '';
+
+  const imgs = dedupeImgs(a.images);
   const imgH = imgs.length
     ? imgs.map((s,i) => `<img src="${s}" onerror="this.style.display='none'" onclick="openLB('${s}')" loading="lazy" alt="Artifact image ${i+1}">`).join('')
     : '<div class="no-img">No images</div>';
@@ -685,25 +986,28 @@ function show(idx) {
     'recovered_fabric_description','recovered_decorative_technique'];
 
   const shortH = SHORT_KEYS
-    .filter(k => kf[k] && String(kf[k]).trim())
+    .filter(k => kf[k] && String(kf[k]).trim() && !isBytesVal(kf[k]))
     .map(k => `<div class="mrow"><span class="mk">${FIELD_LABELS[k]||k}: </span><span class="mv">${esc(String(kf[k]).slice(0,120))}</span></div>`)
     .join('');
 
   const longH = LONG_KEY_KEYS
-    .filter(k => kf[k] && String(kf[k]).trim())
-    .map(k => `<div class="mrow mlong"><span class="mk">${FIELD_LABELS[k]||k}</span><span class="mv">${esc(String(kf[k]).slice(0,600))}${String(kf[k]).length>600?'…':''}</span></div>`)
+    .filter(k => kf[k] && String(kf[k]).trim() && !isBytesVal(kf[k]))
+    .map(k => `<div class="mrow mlong"><span class="mk">${FIELD_LABELS[k]||k}</span><span class="mv">${esc(String(kf[k]).slice(0,600))}${String(kf[k]).length>600?'&hellip;':''}</span></div>`)
     .join('');
 
   const extraH = Object.entries(ef)
-    .filter(([k,v]) => v && String(v).trim() && String(v) !== 'nan'
-      && !String(v).startsWith("b'\\x") && !String(v).startsWith('b"\\x'))
+    .filter(([k,v]) => {
+      if (!v || !String(v).trim() || String(v) === 'nan') return false;
+      if (isBytesVal(v)) return false;
+      return true;
+    })
     .map(([k,v]) => {
       const label = FIELD_LABELS[k] || k.replace(/_/g,' ');
+      const sv = String(v).slice(0,400) + (String(v).length > 400 ? '&hellip;' : '');
       const isLong = LONG_KEYS.has(k) || String(v).length > 80;
-      const val = String(v).slice(0,400) + (String(v).length > 400 ? '…' : '');
       return isLong
-        ? `<div class="mrow mlong"><span class="mk">${label}</span><span class="mv">${esc(val)}</span></div>`
-        : `<div class="mrow"><span class="mk">${label}: </span><span class="mv">${esc(val)}</span></div>`;
+        ? `<div class="mrow mlong"><span class="mk">${label}</span><span class="mv">${esc(sv)}</span></div>`
+        : `<div class="mrow"><span class="mk">${label}: </span><span class="mv">${esc(sv)}</span></div>`;
     }).join('');
 
   const mchips  = models.map(m  => { const mc=MC(m),on=F.models.has(m)?`on-${mc}`:'';   return `<button class="chip ${on}" data-g="models"  data-v="${m}" data-mc="${mc}">${ML(m)}</button>`; }).join('');
@@ -715,7 +1019,7 @@ function show(idx) {
       <div class="uses-header">
         <div>
           <div class="uses-title">Generated Use Hypotheses</div>
-          <div class="uses-subtitle" style="margin-top:0.3rem">AI-generated interpretations · not verified archaeological claims</div>
+          <div class="uses-subtitle" style="margin-top:0.3rem">AI-generated interpretations &middot; not verified archaeological claims</div>
         </div>
       </div>
       <div class="filter-bar" id="fb">
@@ -729,16 +1033,17 @@ function show(idx) {
       <div class="combo-grid" id="cgrid"></div>
     </div>` : `
     <div class="no-uses-notice">
-      No generated use hypotheses for this artifact. Use hypotheses were generated for a selected subset of artifacts of interest. Browse the sidebar for artifacts marked with ●.
+      No generated use hypotheses for this artifact. Use hypotheses were generated for a selected subset of artifacts of interest. Look for artifacts marked with an orange dot in the sidebar.
     </div>`;
 
   document.getElementById('main').innerHTML = `
   <div class="detail">
-    <div class="det-eyebrow">Artifact · ${esc(kf.label || a.label || '')}</div>
+    <div class="det-eyebrow">Artifact &middot; ${esc(kf.label || a.label || '')}</div>
     <div class="det-title">${esc(a.name)}</div>
+    ${ocBarH}
     <div class="badges">${badgesH}</div>
     <div class="img-section">
-      <div class="img-section-title">${imgs.length} Image${imgs.length!==1?'s':''} · click to enlarge</div>
+      <div class="img-section-title">${imgs.length} image${imgs.length!==1?'s':''} &middot; click to enlarge</div>
       <div class="img-grid">${imgH}</div>
     </div>
     <div class="meta-section">
@@ -747,7 +1052,7 @@ function show(idx) {
         <div class="meta-grid">${shortH}${longH}</div>
         ${extraH ? `
         <div class="extra-toggle" onclick="toggleExtra(this)">
-          <span class="earrow">▶</span> SHOW ALL FIELDS (${Object.keys(ef).length} additional)
+          <span class="earrow">&#9654;</span> Show all fields (${Object.keys(ef).filter(k => !isBytesVal(ef[k]) && ef[k] && String(ef[k]) !== 'nan').length} additional)
         </div>
         <div class="extra-grid" id="extra-grid">${extraH}</div>` : ''}
       </div>
@@ -779,7 +1084,7 @@ function renderCombos(combos) {
   if (!grid) return;
   const vis = combos.filter(c =>
     F.models.has(c.model) && F.modes.has(c.input_mode) && F.prompts.has(c.prompt_style));
-  sl.textContent = `Showing ${vis.length} of ${combos.length} use generation results`;
+  sl.textContent = `Showing ${vis.length} of ${combos.length} results`;
   if (!vis.length) {
     grid.innerHTML = '<div class="no-combos">No combinations match the current filters.</div>';
     return;
@@ -787,8 +1092,7 @@ function renderCombos(combos) {
   grid.innerHTML = vis.map((c,i) => {
     const mc    = MC(c.model);
     const isErr = c.response.startsWith('[ERROR');
-    const isSk  = c.response.startsWith('[SKIP');
-    const tcls  = isErr ? 'ctext is-error' : isSk ? 'ctext is-skip' : 'ctext';
+    const tcls  = isErr ? 'ctext is-error' : 'ctext';
     const pid   = `pt-${i}`;
     return `
     <div class="combo-card" style="animation-delay:${i*0.03}s">
@@ -799,10 +1103,10 @@ function renderCombos(combos) {
       </div>
       <div class="cbody">
         <div class="prompt-toggle" onclick="togglePrompt('${pid}',this)">
-          <span class="arrow">▶</span> VIEW PROMPT USED
+          <span class="arrow">&#9654;</span> View prompt used
         </div>
         <div class="prompt-box" id="${pid}">${esc(PROMPT_TEXTS[c.prompt_style]||c.prompt_style)}</div>
-        <div class="${tcls}">${isErr||isSk ? esc(c.response) : renderMd(c.response)}</div>
+        <div class="${tcls}">${isErr ? esc(c.response) : renderMd(c.response)}</div>
       </div>
     </div>`;
   }).join('');
@@ -815,11 +1119,10 @@ function togglePrompt(id, btn) {
 
 function renderMd(s) {
   return esc(s)
-    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
-    .replace(/^###\s(.+)$/gm, '<div style="font-weight:600;font-size:0.96rem;margin-top:0.7rem;color:var(--text)">$1</div>')
-    .replace(/^##\s(.+)$/gm,  '<div style="font-weight:700;font-size:1rem;margin-top:0.8rem;color:var(--text)">$1</div>')
-    .replace(/\n\n/g, '<br><br>')
-    .replace(/\n/g, '<br>');
+    .replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>')
+    .replace(/^###\s(.+)$/gm,'<div style="font-weight:600;font-size:0.96rem;margin-top:0.7rem;color:var(--text)">$1</div>')
+    .replace(/^##\s(.+)$/gm, '<div style="font-weight:700;font-size:1rem;margin-top:0.8rem;color:var(--text)">$1</div>')
+    .replace(/\n\n/g,'<br><br>').replace(/\n/g,'<br>');
 }
 
 function openLB(src) { document.getElementById('lb-img').src=src; document.getElementById('lightbox').classList.add('open'); }
