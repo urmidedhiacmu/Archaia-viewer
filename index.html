@@ -361,12 +361,8 @@ function init(data) {
   document.getElementById('welcome').style.display = 'none';
   document.getElementById('hstats').innerHTML =
     `${arts.length} artifacts · ${s.with_llm||0} with generated uses<br>${models.map(ML).join(' · ')}`;
-
-  // show sidebar immediately with text only, images load lazily
-  requestAnimationFrame(() => {
-    renderSidebar(arts);
-    if (arts.length) show(0);
-  });
+  renderSidebar(arts);
+  if (arts.length) show(0);
 }
 
 // ── SIDEBAR ────────────────────────────────────────────────────────────────
