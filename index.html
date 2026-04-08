@@ -105,6 +105,8 @@ header {
 .badge { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; padding: 0.22em 0.65em; border-radius: 3px; border: 1px solid var(--border2); color: var(--text3); background: var(--surface2); }
 .badge-project { border-color: var(--accent); color: var(--accent); background: var(--accent-lt); }
 .badge-uses { border-color: var(--gold); color: var(--gold); background: var(--gold-lt); font-weight: 500; }
+.badge-v4 { border-color: #1A6535; color: #1A6535; background: #E8F5EE; }
+.badge-v1 { border-color: #8A6020; color: #8A6020; background: #FDF3E0; }
 
 /* Images grid */
 .img-section { margin-bottom: 2rem; }
@@ -399,13 +401,18 @@ function show(idx) {
   const prompts= [...new Set(matrix.map(c => c.prompt_style))];
 
   // Badges
-  const proj = kf.project_label || kf.project || a.project || '';
-  const period = kf.recovered_period || '';
-  const mat    = kf.recovered_material || '';
+  const src = a.dataset_source || 'v4';
+  const srcBadge = a.has_llm
+    ? (src === 'v4'
+        ? `<span class="badge badge-v4" title="This artifact is in the filtered v4 dataset — has location and date data">v4 · location + date verified</span>`
+        : `<span class="badge badge-v1" title="This artifact was not in v4 — missing location or date in OpenContext. Used for LLM study only since an artifact of interest.">v1 · no location / date</span>`)
+    : '';
+
   const badgesH = [
-    proj   ? `<span class="badge badge-project">${esc(proj)}</span>` : '',
-    period ? `<span class="badge">${esc(String(period).slice(0,40))}</span>` : '',
-    mat    ? `<span class="badge">${esc(String(mat).slice(0,30))}</span>` : '',
+    proj     ? `<span class="badge badge-project">${esc(proj)}</span>` : '',
+    period   ? `<span class="badge">${esc(String(period).slice(0,40))}</span>` : '',
+    mat      ? `<span class="badge">${esc(String(mat).slice(0,30))}</span>` : '',
+    srcBadge,
     a.has_llm ? `<span class="badge badge-uses">✦ Generated Uses Available</span>` : '',
   ].filter(Boolean).join('');
 
@@ -469,7 +476,7 @@ function show(idx) {
       <div class="combo-grid" id="cgrid"></div>
     </div>` : `
     <div class="no-uses-notice">
-      No generated use hypotheses for this artifact. Use hypotheses were generated for a subset of 19 artifacts selected for study. Browse the sidebar for artifacts marked with ●.
+      No generated use hypotheses for this artifact. Use hypotheses were generated for a selected subset of artifacts of interest. Browse the sidebar for artifacts marked with ●.
     </div>`;
 
   document.getElementById('main').innerHTML = `
