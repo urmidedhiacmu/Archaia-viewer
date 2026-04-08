@@ -35,7 +35,6 @@
 html, body { height: 100%; overflow: hidden; }
 body { font-family: 'Source Serif 4', Georgia, serif; background: var(--bg); color: var(--text); font-size: 15.5px; }
 
-/* ── HEADER ── */
 header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 100;
   height: 58px; background: var(--surface); border-bottom: 2px solid var(--border);
@@ -51,10 +50,8 @@ header {
 .load-btn:hover { background: #9a4a18; }
 #file-input { display: none; }
 
-/* ── LAYOUT ── */
 .app { position: fixed; top: 58px; left: 0; right: 0; bottom: 0; display: grid; grid-template-columns: var(--sidebar) 1fr; }
 
-/* ── SIDEBAR ── */
 .sidebar { background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
 .sidebar-top { padding: 1rem 1.1rem; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 .slabel { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--text3); margin-bottom: 0.55rem; }
@@ -74,18 +71,12 @@ header {
 .art-info { min-width: 0; flex: 1; }
 .art-name { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .art-proj { font-size: 0.74rem; color: var(--text3); font-style: italic; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.uses-dot {
-  width: 7px; height: 7px; border-radius: 50%;
-  background: var(--accent); flex-shrink: 0;
-  title: "Has generated uses";
-}
+.uses-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex-shrink: 0; }
 
-/* ── MAIN ── */
 .main { overflow-y: auto; background: var(--bg); }
 .main::-webkit-scrollbar { width: 5px; }
 .main::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
 
-/* ── WELCOME ── */
 .welcome { display: flex; flex-direction: column; align-items: center; justify-content: center; height: 100%; text-align: center; padding: 3rem; }
 .welcome-icon { font-size: 3.5rem; margin-bottom: 1.5rem; opacity: 0.18; }
 .welcome h1 { font-family: 'Cormorant Garamond', serif; font-size: 2.2rem; font-weight: 700; color: var(--accent); margin-bottom: 0.5rem; }
@@ -94,7 +85,6 @@ header {
 .welcome-load:hover { background: #9a4a18; }
 .welcome-hint { margin-top: 1.1rem; font-size: 0.72rem; color: var(--text3); font-family: 'JetBrains Mono', monospace; }
 
-/* ── DETAIL ── */
 .detail { padding: 2.2rem 2.8rem 5rem; animation: fadeIn 0.22s ease; }
 @keyframes fadeIn { from { opacity:0; transform:translateY(6px); } to { opacity:1; transform:none; } }
 
@@ -108,7 +98,6 @@ header {
 .badge-v4 { border-color: #1A6535; color: #1A6535; background: #E8F5EE; }
 .badge-v1 { border-color: #8A6020; color: #8A6020; background: #FDF3E0; }
 
-/* Images grid */
 .img-section { margin-bottom: 2rem; }
 .img-section-title { font-family: 'JetBrains Mono', monospace; font-size: 0.57rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text3); margin-bottom: 0.9rem; }
 .img-grid { display: flex; flex-wrap: wrap; gap: 0.6rem; }
@@ -116,7 +105,6 @@ header {
 .img-grid img:hover { border-color: var(--accent); transform: scale(1.03); box-shadow: 0 4px 16px rgba(0,0,0,0.12); }
 .no-img { height: 120px; width: 140px; border: 1px dashed var(--border2); border-radius: var(--r); display: flex; align-items: center; justify-content: center; color: var(--text3); font-size: 0.8rem; font-style: italic; }
 
-/* Metadata */
 .meta-section { margin-bottom: 2rem; }
 .meta-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 1.2rem 1.4rem; }
 .meta-card-title { font-family: 'JetBrains Mono', monospace; font-size: 0.57rem; text-transform: uppercase; letter-spacing: 0.15em; color: var(--text3); margin-bottom: 0.9rem; padding-bottom: 0.6rem; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
@@ -128,45 +116,18 @@ header {
 .mlong .mk { display: block; margin-bottom: 0.2rem; }
 .mlong .mv { display: block; color: var(--text); font-size: 0.9rem; line-height: 1.7; }
 
-/* Extra fields toggle */
-.extra-toggle {
-  display: inline-flex; align-items: center; gap: 0.4rem;
-  font-family: 'JetBrains Mono', monospace; font-size: 0.6rem;
-  color: var(--text3); cursor: pointer; user-select: none;
-  transition: color 0.12s; margin-top: 0.8rem;
-  writing-mode: horizontal-tb;
-}
+.extra-toggle { display: inline-flex; align-items: center; gap: 0.4rem; font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--text3); cursor: pointer; user-select: none; transition: color 0.12s; margin-top: 0.8rem; }
 .extra-toggle:hover { color: var(--text2); }
 .extra-toggle .earrow { transition: transform 0.15s; display: inline-block; }
 .extra-toggle.open .earrow { transform: rotate(90deg); }
 .extra-grid { display: none; margin-top: 0.8rem; padding-top: 0.8rem; border-top: 1px dashed var(--border); grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 0.3rem 1.5rem; }
 .extra-grid.open { display: grid; }
 
-/* ── USES SECTION ── */
-.uses-section {
-  background: var(--uses-bg);
-  border: 1px solid var(--uses-border);
-  border-radius: var(--r);
-  padding: 1.8rem 2rem;
-  margin-bottom: 2rem;
-}
-.uses-header {
-  display: flex; align-items: baseline; justify-content: space-between;
-  margin-bottom: 1.4rem; padding-bottom: 1rem;
-  border-bottom: 1px solid var(--uses-border);
-  flex-wrap: wrap; gap: 0.75rem;
-}
-.uses-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.3rem; font-weight: 700; color: var(--accent);
-}
-.uses-subtitle {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.6rem; color: var(--text3);
-  text-transform: uppercase; letter-spacing: 0.1em;
-}
+.uses-section { background: var(--uses-bg); border: 1px solid var(--uses-border); border-radius: var(--r); padding: 1.8rem 2rem; margin-bottom: 2rem; }
+.uses-header { display: flex; align-items: baseline; justify-content: space-between; margin-bottom: 1.4rem; padding-bottom: 1rem; border-bottom: 1px solid var(--uses-border); flex-wrap: wrap; gap: 0.75rem; }
+.uses-title { font-family: 'Cormorant Garamond', serif; font-size: 1.3rem; font-weight: 700; color: var(--accent); }
+.uses-subtitle { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.1em; }
 
-/* Filter bar */
 .filter-bar { display: flex; gap: 2rem; flex-wrap: wrap; align-items: center; margin-bottom: 1.4rem; }
 .fg { display: flex; flex-direction: column; gap: 0.4rem; }
 .flabel { font-family: 'JetBrains Mono', monospace; font-size: 0.56rem; text-transform: uppercase; letter-spacing: 0.14em; color: var(--text3); }
@@ -183,7 +144,6 @@ header {
 .sec-label { font-family: 'Cormorant Garamond', serif; font-size: 0.9rem; font-style: italic; color: var(--text3); margin-bottom: 1rem; display: flex; align-items: center; gap: 0.75rem; }
 .sec-label::after { content: ''; flex: 1; height: 1px; background: var(--uses-border); }
 
-/* Combo grid */
 .combo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(600px, 1fr)); gap: 1.4rem; }
 .combo-card { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; transition: box-shadow 0.18s, border-color 0.18s, transform 0.18s; animation: fadeIn 0.2s ease both; }
 .combo-card:hover { box-shadow: 0 4px 20px rgba(0,0,0,0.07); border-color: var(--border2); transform: translateY(-1px); }
@@ -211,15 +171,8 @@ header {
 .ctext.is-skip  { color: var(--text3); font-style: italic; }
 .no-combos { grid-column: 1/-1; text-align: center; padding: 3rem; color: var(--text3); font-style: italic; font-family: 'Cormorant Garamond', serif; font-size: 1.05rem; }
 
-/* No uses notice */
-.no-uses-notice {
-  background: var(--surface2); border: 1px solid var(--border);
-  border-radius: var(--r); padding: 1.4rem 1.6rem;
-  color: var(--text3); font-style: italic; font-size: 0.95rem;
-  line-height: 1.6; margin-bottom: 2rem;
-}
+.no-uses-notice { background: var(--surface2); border: 1px solid var(--border); border-radius: var(--r); padding: 1.4rem 1.6rem; color: var(--text3); font-style: italic; font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem; }
 
-/* Lightbox */
 .lightbox { display: none; position: fixed; inset: 0; z-index: 200; background: rgba(0,0,0,0.88); align-items: center; justify-content: center; cursor: zoom-out; }
 .lightbox.open { display: flex; }
 .lightbox img { max-width: 92vw; max-height: 92vh; border-radius: var(--r); box-shadow: 0 8px 40px rgba(0,0,0,0.5); }
@@ -259,7 +212,7 @@ header {
     <div class="welcome" id="welcome">
       <div class="welcome-icon">𓏢</div>
       <h1>Archaia Artifact Browser</h1>
-      <p>Load <code style="font-family:'JetBrains Mono';font-size:0.82em;color:var(--accent);background:var(--accent-lt);padding:0.1em 0.4em;border-radius:3px">combined_data.json</code> to browse 100+ artifacts with metadata, images, and LLM-generated use hypotheses for selected artifacts.</p>
+      <p>Load <code style="font-family:'JetBrains Mono';font-size:0.82em;color:var(--accent);background:var(--accent-lt);padding:0.1em 0.4em;border-radius:3px">combined_data.json</code> to browse artifacts with metadata, images, and LLM-generated use hypotheses.</p>
       <button class="welcome-load" onclick="document.getElementById('file-input').click()">Load Data</button>
       <div class="welcome-hint">● dot in sidebar = artifact has generated uses</div>
     </div>
@@ -306,6 +259,7 @@ const IL = { sparse:'Sparse', full_and_images:'Full + Images' };
 
 const FIELD_LABELS = {
   label:'Label', project_label:'Project', project:'Project',
+  item_class_label:'Artifact Class',
   recovered_artifact_name:'Artifact Name', recovered_material:'Material',
   recovered_material_note:'Material Note', recovered_object_type:'Object Type',
   recovered_object_type_note:'Object Type Note', recovered_period:'Period',
@@ -320,8 +274,8 @@ const FIELD_LABELS = {
   recovered_locus_id:'Locus ID', recovered_registration_date:'Registration Date',
   recovered_disposition:'Disposition', recovered_text_fields_json:'Full Recovered JSON',
   earliest:'Earliest Date', latest:'Latest Date', latitude:'Latitude', longitude:'Longitude',
-  start:'Start', stop:'Stop', slug:'Slug', context_uuid:'Context UUID',
-  item_class_uuid:'Item Class UUID', project_uuid:'Project UUID',
+  start:'Start', stop:'Stop', slug:'Slug', uuid_hex:'UUID',
+  context_uuid:'Context UUID', item_class_uuid:'Item Class UUID', project_uuid:'Project UUID',
   reference_type:'Reference Type', is_best:'Is Best', quality_score:'Quality Score',
   geo_depth:'Geo Depth', geo_specificity_y:'Geo Specificity', geo_zoom:'Geo Zoom',
   geometry:'Geometry', geometry_type:'Geometry Type', image_count_y:'Image Count',
@@ -342,7 +296,7 @@ document.getElementById('file-input').addEventListener('change', e => {
   const r = new FileReader();
   r.onload = ev => {
     try { init(JSON.parse(ev.target.result)); }
-    catch(err) { console.error(err); alert('Could not parse JSON: ' + err.message); }
+    catch(err) { alert('Could not parse JSON: ' + err.message); }
   };
   r.readAsText(f);
 });
@@ -365,7 +319,6 @@ function init(data) {
   if (arts.length) show(0);
 }
 
-// ── SIDEBAR ────────────────────────────────────────────────────────────────
 function renderSidebar(arts, q='') {
   const list = document.getElementById('art-list');
   const filtered = arts.filter(a =>
@@ -375,8 +328,8 @@ function renderSidebar(arts, q='') {
   list.innerHTML = filtered.length ? filtered.map(a => {
     const idx  = DATA.artifacts.indexOf(a);
     const thumb = a.images && a.images.length ? a.images[0] : null;
-    return `<div class="art-item..." ...>
-      <div class="art-thumb">${thumb ? `<img loading="lazy" src="${thumb}" onerror="this.parentNode.textContent='𓏢'">` : '𓏢'}</div>
+    return `<div class="art-item${idx===cur?' active':''}" onclick="selectArt(${idx})">
+      <div class="art-thumb">${thumb ? `<img src="${thumb}" onerror="this.parentNode.textContent='𓏢'">` : '𓏢'}</div>
       <div class="art-info">
         <div class="art-name">${esc(a.name)}</div>
         <div class="art-proj">${esc(a.project||'—')}</div>
@@ -386,10 +339,15 @@ function renderSidebar(arts, q='') {
   }).join('') : '<div style="padding:1.2rem;color:var(--text3);font-style:italic;text-align:center">No matches</div>';
 }
 
-function selectArt(idx) { cur=idx; renderSidebar(DATA.artifacts, document.getElementById('search').value); show(idx); }
-document.getElementById('search').addEventListener('input', e => renderSidebar(DATA?.artifacts||[], e.target.value));
+function selectArt(idx) {
+  cur = idx;
+  renderSidebar(DATA.artifacts, document.getElementById('search').value);
+  show(idx);
+}
 
-// ── DETAIL ─────────────────────────────────────────────────────────────────
+document.getElementById('search').addEventListener('input', e =>
+  renderSidebar(DATA?.artifacts||[], e.target.value));
+
 function show(idx) {
   cur = idx;
   const a      = DATA.artifacts[idx];
@@ -400,12 +358,15 @@ function show(idx) {
   const modes  = [...new Set(matrix.map(c => c.input_mode))];
   const prompts= [...new Set(matrix.map(c => c.prompt_style))];
 
-  // Badges
-  const src = a.dataset_source || 'v4';
+  const proj   = kf.project_label || kf.project || a.project || '';
+  const period = kf.recovered_period || '';
+  const mat    = kf.recovered_material || '';
+  const src    = a.dataset_source || 'v4';
+
   const srcBadge = a.has_llm
     ? (src === 'v4'
-        ? `<span class="badge badge-v4" title="This artifact is in the filtered v4 dataset — has location and date data">v4 · location + date verified</span>`
-        : `<span class="badge badge-v1" title="This artifact was not in v4 — missing location or date in OpenContext. Used for LLM study only since an artifact of interest.">v1 · no location / date</span>`)
+        ? `<span class="badge badge-v4" title="In v4 dataset — has location and date data">v4 · location + date verified</span>`
+        : `<span class="badge badge-v1" title="Not in v4 — missing location or date in OpenContext. Used for LLM study only.">v1 · no location / date</span>`)
     : '';
 
   const badgesH = [
@@ -416,16 +377,14 @@ function show(idx) {
     a.has_llm ? `<span class="badge badge-uses">✦ Generated Uses Available</span>` : '',
   ].filter(Boolean).join('');
 
-  // Images
   const imgs = a.images || [];
   const imgH = imgs.length
     ? imgs.map((src,i) => `<img src="${src}" onerror="this.style.display='none'" onclick="openLB('${src}')" loading="lazy" alt="Artifact image ${i+1}">`).join('')
     : '<div class="no-img">No images</div>';
 
-  // Key fields
-  const SHORT_KEYS = ['label','project_label','recovered_material','recovered_object_type',
-    'recovered_period','recovered_condition','recovered_size','recovered_munsell_color',
-    'recovered_chronotype','earliest','latest'];
+  const SHORT_KEYS = ['label','project_label','item_class_label','recovered_material',
+    'recovered_object_type','recovered_period','recovered_condition','recovered_size',
+    'recovered_munsell_color','recovered_chronotype','earliest','latest'];
   const LONG_KEY_KEYS = ['recovered_description','recovered_note','recovered_function',
     'recovered_fabric_description','recovered_decorative_technique'];
 
@@ -439,24 +398,22 @@ function show(idx) {
     .map(k => `<div class="mrow mlong"><span class="mk">${FIELD_LABELS[k]||k}</span><span class="mv">${esc(String(kf[k]).slice(0,600))}${String(kf[k]).length>600?'…':''}</span></div>`)
     .join('');
 
-  // Extra fields
   const extraH = Object.entries(ef)
-  .filter(([k,v]) => v && String(v).trim() && String(v) !== 'nan' && !String(v).startsWith("b'\\x") && !String(v).startsWith('b"\\x'))
+    .filter(([k,v]) => v && String(v).trim() && String(v) !== 'nan'
+      && !String(v).startsWith("b'\\x") && !String(v).startsWith('b"\\x'))
     .map(([k,v]) => {
       const label = FIELD_LABELS[k] || k.replace(/_/g,' ');
       const isLong = LONG_KEYS.has(k) || String(v).length > 80;
-      const val   = String(v).slice(0, 400) + (String(v).length > 400 ? '…' : '');
+      const val = String(v).slice(0,400) + (String(v).length > 400 ? '…' : '');
       return isLong
         ? `<div class="mrow mlong"><span class="mk">${label}</span><span class="mv">${esc(val)}</span></div>`
         : `<div class="mrow"><span class="mk">${label}: </span><span class="mv">${esc(val)}</span></div>`;
     }).join('');
 
-  // Filter chips
-  const mchips = models.map(m => { const mc=MC(m),on=F.models.has(m)?`on-${mc}`:''; return `<button class="chip ${on}" data-g="models" data-v="${m}" data-mc="${mc}">${ML(m)}</button>`; }).join('');
-  const dchips = modes.map(m  => { const on=F.modes.has(m)?'on-mode':''; return `<button class="chip ${on}" data-g="modes" data-v="${m}" data-mc="mode">${IL[m]||m}</button>`; }).join('');
-  const pchips = prompts.map(p=> { const on=F.prompts.has(p)?'on-prompt':''; return `<button class="chip ${on}" data-g="prompts" data-v="${p}" data-mc="prompt">${PL[p]||p}</button>`; }).join('');
+  const mchips  = models.map(m  => { const mc=MC(m),on=F.models.has(m)?`on-${mc}`:'';   return `<button class="chip ${on}" data-g="models"  data-v="${m}" data-mc="${mc}">${ML(m)}</button>`; }).join('');
+  const dchips  = modes.map(m   => { const on=F.modes.has(m)?'on-mode':'';               return `<button class="chip ${on}" data-g="modes"   data-v="${m}" data-mc="mode">${IL[m]||m}</button>`; }).join('');
+  const pchips  = prompts.map(p => { const on=F.prompts.has(p)?'on-prompt':'';           return `<button class="chip ${on}" data-g="prompts" data-v="${p}" data-mc="prompt">${PL[p]||p}</button>`; }).join('');
 
-  // Uses section
   const usesH = a.has_llm ? `
     <div class="uses-section">
       <div class="uses-header">
@@ -484,26 +441,21 @@ function show(idx) {
     <div class="det-eyebrow">Artifact · ${esc(kf.label || a.label || '')}</div>
     <div class="det-title">${esc(a.name)}</div>
     <div class="badges">${badgesH}</div>
-
     <div class="img-section">
       <div class="img-section-title">${imgs.length} Image${imgs.length!==1?'s':''} · click to enlarge</div>
       <div class="img-grid">${imgH}</div>
     </div>
-
     <div class="meta-section">
       <div class="meta-card">
-        <div class="meta-card-title">
-          <span>Key Metadata</span>
-        </div>
+        <div class="meta-card-title"><span>Key Metadata</span></div>
         <div class="meta-grid">${shortH}${longH}</div>
         ${extraH ? `
-        <div class="extra-toggle" onclick="toggleExtra(this)" id="extra-toggle">
+        <div class="extra-toggle" onclick="toggleExtra(this)">
           <span class="earrow">▶</span> SHOW ALL FIELDS (${Object.keys(ef).length} additional)
         </div>
         <div class="extra-grid" id="extra-grid">${extraH}</div>` : ''}
       </div>
     </div>
-
     ${usesH}
   </div>`;
 
@@ -523,11 +475,8 @@ function toggleExtra(btn) {
   const grid = document.getElementById('extra-grid');
   grid.classList.toggle('open');
   btn.classList.toggle('open');
-  btn.querySelector('.earrow').parentElement.childNodes[1].textContent =
-    grid.classList.contains('open') ? ' HIDE EXTRA FIELDS' : ` SHOW ALL FIELDS (${grid.querySelectorAll('.mrow').length} additional)`;
 }
 
-// ── COMBOS ──────────────────────────────────────────────────────────────────
 function renderCombos(combos) {
   const grid = document.getElementById('cgrid');
   const sl   = document.getElementById('slabel');
@@ -535,8 +484,10 @@ function renderCombos(combos) {
   const vis = combos.filter(c =>
     F.models.has(c.model) && F.modes.has(c.input_mode) && F.prompts.has(c.prompt_style));
   sl.textContent = `Showing ${vis.length} of ${combos.length} use generation results`;
-  if (!vis.length) { grid.innerHTML = '<div class="no-combos">No combinations match the current filters.</div>'; return; }
-
+  if (!vis.length) {
+    grid.innerHTML = '<div class="no-combos">No combinations match the current filters.</div>';
+    return;
+  }
   grid.innerHTML = vis.map((c,i) => {
     const mc    = MC(c.model);
     const isErr = c.response.startsWith('[ERROR');
@@ -575,10 +526,15 @@ function renderMd(s) {
     .replace(/\n/g, '<br>');
 }
 
-function openLB(src) { document.getElementById('lb-img').src=src; document.getElementById('lightbox').classList.add('open'); }
+function openLB(src) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
 function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
 document.addEventListener('keydown', e => { if(e.key==='Escape') closeLightbox(); });
-function esc(s) { return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function esc(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
 </script>
 </body>
 </html>
