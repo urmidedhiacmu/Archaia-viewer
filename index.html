@@ -361,8 +361,12 @@ function init(data) {
   document.getElementById('welcome').style.display = 'none';
   document.getElementById('hstats').innerHTML =
     `${arts.length} artifacts · ${s.with_llm||0} with generated uses<br>${models.map(ML).join(' · ')}`;
-  renderSidebar(arts);
-  if (arts.length) show(0);
+
+  // show sidebar immediately with text only, images load lazily
+  requestAnimationFrame(() => {
+    renderSidebar(arts);
+    if (arts.length) show(0);
+  });
 }
 
 // ── SIDEBAR ────────────────────────────────────────────────────────────────
@@ -375,8 +379,8 @@ function renderSidebar(arts, q='') {
   list.innerHTML = filtered.length ? filtered.map(a => {
     const idx  = DATA.artifacts.indexOf(a);
     const thumb = a.images && a.images.length ? a.images[0] : null;
-    return `<div class="art-item${idx===cur?' active':''}" onclick="selectArt(${idx})">
-      <div class="art-thumb">${thumb ? `<img src="${thumb}" onerror="this.parentNode.textContent='𓏢'">` : '𓏢'}</div>
+    return `<div class="art-item..." ...>
+      <div class="art-thumb">${thumb ? `<img loading="lazy" src="${thumb}" onerror="this.parentNode.textContent='𓏢'">` : '𓏢'}</div>
       <div class="art-info">
         <div class="art-name">${esc(a.name)}</div>
         <div class="art-proj">${esc(a.project||'—')}</div>
