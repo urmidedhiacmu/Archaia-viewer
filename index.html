@@ -58,17 +58,27 @@ header {
 
 /* ── SIDEBAR ── */
 .sidebar { background: var(--surface); border-right: 1px solid var(--border); display: flex; flex-direction: column; overflow: hidden; }
-.sidebar-top { padding: 0.9rem 1.1rem; border-bottom: 1px solid var(--border); flex-shrink: 0; }
+.sidebar-top { padding: 0.9rem 1.1rem 0.7rem; border-bottom: 1px solid var(--border); flex-shrink: 0; }
 .slabel { font-family: 'JetBrains Mono', monospace; font-size: 0.56rem; text-transform: uppercase; letter-spacing: 0.16em; color: var(--text3); margin-bottom: 0.5rem; }
-.search { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: var(--r); padding: 0.38rem 0.75rem; font-family: 'Source Serif 4', serif; font-size: 0.9rem; color: var(--text); outline: none; transition: border-color 0.15s; }
+.search { width: 100%; background: var(--bg); border: 1px solid var(--border); border-radius: var(--r); padding: 0.38rem 0.75rem; font-family: 'Source Serif 4', serif; font-size: 0.9rem; color: var(--text); outline: none; transition: border-color 0.15s; margin-bottom: 0.7rem; }
 .search:focus { border-color: var(--accent); }
 .search::placeholder { color: var(--text3); }
-.sidebar-filters { display: flex; gap: 0.3rem; margin-top: 0.55rem; }
-.sf-chip { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; padding: 0.2em 0.6em; border-radius: 3px; border: 1px solid var(--border); background: transparent; color: var(--text3); cursor: pointer; transition: all 0.12s; text-transform: uppercase; letter-spacing: 0.04em; }
+
+/* filter rows */
+.sf-filter-rows { display: flex; flex-direction: column; gap: 0.45rem; }
+.sf-row { display: flex; align-items: flex-start; gap: 0.4rem; }
+.sf-row-label { font-family: 'JetBrains Mono', monospace; font-size: 0.52rem; text-transform: uppercase; letter-spacing: 0.1em; color: var(--text3); min-width: 42px; padding-top: 0.22em; flex-shrink: 0; }
+.sf-chips { display: flex; flex-wrap: wrap; gap: 0.25rem; }
+.sf-chip { font-family: 'JetBrains Mono', monospace; font-size: 0.55rem; padding: 0.18em 0.55em; border-radius: 3px; border: 1px solid var(--border); background: transparent; color: var(--text3); cursor: pointer; transition: all 0.12s; text-transform: uppercase; letter-spacing: 0.03em; white-space: nowrap; }
 .sf-chip:hover { border-color: var(--text3); color: var(--text2); }
-.sf-chip.sf-active { background: var(--accent); border-color: var(--accent); color: white; }
-.sf-chip.sf-uses { }
-.sf-chip.sf-uses.sf-active { background: var(--accent); }
+.sf-chip.sf-active-uses  { background: var(--accent);    border-color: var(--accent);    color: white; }
+.sf-chip.sf-active-nouses{ background: var(--surface2);  border-color: var(--border2);   color: var(--text2); }
+.sf-chip.sf-active-ver   { background: var(--v4);        border-color: var(--v4);        color: white; }
+.sf-chip.sf-active-ver.v1{ background: var(--v1);        border-color: var(--v1); }
+.sf-chip.sf-active-all   { background: var(--text);      border-color: var(--text);      color: white; }
+.sf-chip.sf-active-type  { background: var(--gold);      border-color: var(--gold);      color: white; }
+
+.sf-divider { height: 1px; background: var(--border); margin: 0.3rem 0; }
 
 .art-list { flex: 1; overflow-y: auto; padding: 0.4rem 0; }
 .art-list::-webkit-scrollbar { width: 4px; }
@@ -93,187 +103,54 @@ header {
 ══════════════════════════════════════════════════ */
 .landing { min-height: 100%; background: var(--bg); }
 
-/* Hero */
 .l-hero {
-  position: relative;
-  overflow: hidden;
-  padding: 5rem 5rem 4rem;
-  border-bottom: 1px solid var(--border);
+  position: relative; overflow: hidden;
+  padding: 5rem 5rem 4rem; border-bottom: 1px solid var(--border);
 }
 .l-hero-grid {
   position: absolute; inset: 0;
-  background-image:
-    linear-gradient(var(--border) 1px, transparent 1px),
-    linear-gradient(90deg, var(--border) 1px, transparent 1px);
-  background-size: 40px 40px;
-  opacity: 0.4;
+  background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px);
+  background-size: 40px 40px; opacity: 0.4;
   mask-image: radial-gradient(ellipse 80% 100% at 50% 0%, black 40%, transparent 100%);
 }
 .l-hero-num {
-  position: absolute;
-  right: 4rem; top: 50%;
-  transform: translateY(-50%);
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 14rem;
-  font-weight: 300;
-  line-height: 1;
-  color: var(--border2);
-  opacity: 0.35;
-  user-select: none;
-  letter-spacing: -0.04em;
+  position: absolute; right: 4rem; top: 50%; transform: translateY(-50%);
+  font-family: 'Cormorant Garamond', serif; font-size: 14rem; font-weight: 300; line-height: 1;
+  color: var(--border2); opacity: 0.35; user-select: none; letter-spacing: -0.04em;
 }
 .l-hero-content { position: relative; z-index: 1; max-width: 620px; }
 .l-pre {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.6rem;
-  text-transform: uppercase;
-  letter-spacing: 0.22em;
-  color: var(--accent);
-  margin-bottom: 1.4rem;
-  display: flex;
-  align-items: center;
-  gap: 0.8rem;
+  font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; text-transform: uppercase;
+  letter-spacing: 0.22em; color: var(--accent); margin-bottom: 1.4rem;
+  display: flex; align-items: center; gap: 0.8rem;
 }
-.l-pre::before {
-  content: '';
-  display: inline-block;
-  width: 28px;
-  height: 1px;
-  background: var(--accent);
-}
-.l-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 4.2rem;
-  font-weight: 700;
-  line-height: 1.0;
-  color: var(--text);
-  margin-bottom: 1.6rem;
-  letter-spacing: -0.01em;
-}
+.l-pre::before { content: ''; display: inline-block; width: 28px; height: 1px; background: var(--accent); }
+.l-title { font-family: 'Cormorant Garamond', serif; font-size: 4.2rem; font-weight: 700; line-height: 1.0; color: var(--text); margin-bottom: 1.6rem; letter-spacing: -0.01em; }
 .l-title span { color: var(--accent); font-style: italic; }
-.l-body {
-  font-size: 1rem;
-  line-height: 1.8;
-  color: var(--text2);
-  max-width: 500px;
-  margin-bottom: 2.2rem;
-}
-.l-stats {
-  display: flex;
-  gap: 0;
-  margin-bottom: 2.4rem;
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  overflow: hidden;
-  background: var(--surface);
-  width: fit-content;
-}
-.l-stat {
-  padding: 0.9rem 1.6rem;
-  border-right: 1px solid var(--border);
-  display: flex;
-  flex-direction: column;
-  gap: 0.15rem;
-  min-width: 100px;
-}
+.l-body { font-size: 1rem; line-height: 1.8; color: var(--text2); max-width: 500px; margin-bottom: 2.2rem; }
+.l-stats { display: flex; gap: 0; margin-bottom: 2.4rem; border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; background: var(--surface); width: fit-content; }
+.l-stat { padding: 0.9rem 1.6rem; border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 0.15rem; min-width: 100px; }
 .l-stat:last-child { border-right: none; }
-.l-stat-n {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 2rem;
-  font-weight: 700;
-  color: var(--accent);
-  line-height: 1;
-}
-.l-stat-l {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.52rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--text3);
-}
-.l-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 2rem;
-  background: var(--accent);
-  color: white;
-  border: none;
-  border-radius: var(--r);
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: background 0.15s, transform 0.12s;
-  letter-spacing: 0.02em;
-}
+.l-stat-n { font-family: 'Cormorant Garamond', serif; font-size: 2rem; font-weight: 700; color: var(--accent); line-height: 1; }
+.l-stat-l { font-family: 'JetBrains Mono', monospace; font-size: 0.52rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text3); }
+.l-cta { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.75rem 2rem; background: var(--accent); color: white; border: none; border-radius: var(--r); font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; cursor: pointer; transition: background 0.15s, transform 0.12s; letter-spacing: 0.02em; }
 .l-cta:hover { background: #9a4a18; transform: translateY(-1px); }
 .l-cta svg { width: 14px; height: 14px; }
 
-/* Sections */
 .l-body-wrap { padding: 4rem 5rem; display: flex; flex-direction: column; gap: 4rem; }
-.l-section-head {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.58rem;
-  text-transform: uppercase;
-  letter-spacing: 0.2em;
-  color: var(--text3);
-  margin-bottom: 1.6rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
+.l-section-head { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--text3); margin-bottom: 1.6rem; display: flex; align-items: center; gap: 1rem; }
 .l-section-head::after { content: ''; flex: 1; height: 1px; background: var(--border); }
 
-/* Feature list */
 .l-features { display: flex; flex-direction: column; gap: 0; }
-.l-feat {
-  display: grid;
-  grid-template-columns: 2.4rem 1fr;
-  gap: 0 1.2rem;
-  padding: 1.1rem 0;
-  border-bottom: 1px solid var(--border);
-  align-items: start;
-}
+.l-feat { display: grid; grid-template-columns: 2.4rem 1fr; gap: 0 1.2rem; padding: 1.1rem 0; border-bottom: 1px solid var(--border); align-items: start; }
 .l-feat:first-child { border-top: 1px solid var(--border); }
-.l-feat-num {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.4rem;
-  font-weight: 300;
-  color: var(--border2);
-  line-height: 1.3;
-  text-align: right;
-}
-.l-feat-content { }
-.l-feat-title {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.1rem;
-  font-weight: 600;
-  color: var(--text);
-  margin-bottom: 0.25rem;
-}
+.l-feat-num { font-family: 'Cormorant Garamond', serif; font-size: 1.4rem; font-weight: 300; color: var(--border2); line-height: 1.3; text-align: right; }
+.l-feat-title { font-family: 'Cormorant Garamond', serif; font-size: 1.1rem; font-weight: 600; color: var(--text); margin-bottom: 0.25rem; }
 .l-feat-desc { font-size: 0.9rem; line-height: 1.7; color: var(--text2); }
 
-/* Badge glossary */
 .l-badge-grid { display: flex; flex-direction: column; gap: 0.8rem; }
-.l-badge-row {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 1.2rem;
-  align-items: start;
-  padding: 1rem 1.2rem;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-}
-.l-badge-sample {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  padding: 0.28em 0.7em;
-  border-radius: 3px;
-  width: fit-content;
-  white-space: nowrap;
-}
+.l-badge-row { display: grid; grid-template-columns: 200px 1fr; gap: 1.2rem; align-items: start; padding: 1rem 1.2rem; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); }
+.l-badge-sample { font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; padding: 0.28em 0.7em; border-radius: 3px; width: fit-content; white-space: nowrap; }
 .lbs-v4    { border: 1px solid var(--v4);    color: var(--v4);    background: var(--v4-lt); }
 .lbs-v1    { border: 1px solid var(--v1);    color: var(--v1);    background: var(--v1-lt); }
 .lbs-uses  { border: 1px solid var(--gold);  color: var(--gold);  background: var(--gold-lt); }
@@ -283,142 +160,33 @@ header {
 .l-badge-desc { font-size: 0.88rem; line-height: 1.7; color: var(--text2); }
 .l-badge-desc strong { color: var(--text); font-weight: 600; }
 
-/* Dataset box */
-.l-dataset-box {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  overflow: hidden;
-}
-.l-dataset-header {
-  background: var(--text);
-  padding: 0.7rem 1.4rem;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.58rem;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: rgba(255,255,255,0.6);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
+.l-dataset-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); overflow: hidden; }
+.l-dataset-header { background: var(--text); padding: 0.7rem 1.4rem; font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.14em; color: rgba(255,255,255,0.6); display: flex; align-items: center; justify-content: space-between; }
 .l-dataset-rows { padding: 1rem 0; }
-.l-dataset-row {
-  display: grid;
-  grid-template-columns: 160px 1fr;
-  gap: 0.5rem 1.5rem;
-  padding: 0.45rem 1.4rem;
-  align-items: center;
-}
+.l-dataset-row { display: grid; grid-template-columns: 160px 1fr; gap: 0.5rem 1.5rem; padding: 0.45rem 1.4rem; align-items: center; }
 .l-dataset-row:hover { background: var(--surface2); }
-.l-dk {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.62rem;
-  color: var(--text3);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-}
-.l-dv {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.72rem;
-  color: var(--text);
-  word-break: break-all;
-}
-.l-dv a {
-  color: var(--gemini);
-  text-decoration: none;
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.12s;
-}
+.l-dk { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.08em; }
+.l-dv { font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; color: var(--text); word-break: break-all; }
+.l-dv a { color: var(--gemini); text-decoration: none; border-bottom: 1px solid transparent; transition: border-color 0.12s; }
 .l-dv a:hover { border-color: var(--gemini); }
-.l-dv-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 0.2em 0.6em;
-  border-radius: 3px;
-  font-size: 0.6rem;
-  background: var(--v4-lt);
-  color: var(--v4);
-  border: 1px solid var(--v4);
-}
 
-/* Models */
 .l-model-row { display: flex; gap: 1rem; flex-wrap: wrap; }
-.l-model-card {
-  flex: 1; min-width: 220px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--r);
-  padding: 1.2rem 1.4rem;
-}
-.l-model-tag {
-  display: inline-block;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  padding: 0.2em 0.7em;
-  border-radius: 3px;
-  margin-bottom: 0.7rem;
-  font-weight: 500;
-}
+.l-model-card { flex: 1; min-width: 220px; background: var(--surface); border: 1px solid var(--border); border-radius: var(--r); padding: 1.2rem 1.4rem; }
+.l-model-tag { display: inline-block; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; padding: 0.2em 0.7em; border-radius: 3px; margin-bottom: 0.7rem; font-weight: 500; }
 .lmt-gpt    { background: var(--gpt);    color: white; }
 .lmt-gemini { background: var(--gemini); color: white; }
 .l-model-desc { font-size: 0.88rem; line-height: 1.65; color: var(--text2); }
 
-/* Prompt modes table */
 .l-prompt-table { width: 100%; border-collapse: collapse; }
-.l-prompt-table th {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.56rem;
-  text-transform: uppercase;
-  letter-spacing: 0.12em;
-  color: var(--text3);
-  text-align: left;
-  padding: 0.6rem 1rem;
-  border-bottom: 2px solid var(--border);
-  background: var(--surface);
-}
-.l-prompt-table td {
-  padding: 0.7rem 1rem;
-  border-bottom: 1px solid var(--border);
-  font-size: 0.88rem;
-  color: var(--text2);
-  vertical-align: top;
-  background: var(--surface);
-}
+.l-prompt-table th { font-family: 'JetBrains Mono', monospace; font-size: 0.56rem; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text3); text-align: left; padding: 0.6rem 1rem; border-bottom: 2px solid var(--border); background: var(--surface); }
+.l-prompt-table td { padding: 0.7rem 1rem; border-bottom: 1px solid var(--border); font-size: 0.88rem; color: var(--text2); vertical-align: top; background: var(--surface); }
 .l-prompt-table tr:last-child td { border-bottom: none; }
 .l-prompt-table tr:hover td { background: var(--surface2); }
-.l-prompt-name {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1rem;
-  font-weight: 600;
-  color: var(--text);
-}
+.l-prompt-name { font-family: 'Cormorant Garamond', serif; font-size: 1rem; font-weight: 600; color: var(--text); }
 
-/* Footer */
-.l-footer {
-  padding: 2rem 5rem;
-  border-top: 1px solid var(--border);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.l-footer-left {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.58rem;
-  color: var(--text3);
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  line-height: 1.8;
-}
-.l-footer-right {
-  font-family: 'Cormorant Garamond', serif;
-  font-size: 1.8rem;
-  font-weight: 700;
-  color: var(--border);
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-}
+.l-footer { padding: 2rem 5rem; border-top: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; }
+.l-footer-left { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; color: var(--text3); text-transform: uppercase; letter-spacing: 0.14em; line-height: 1.8; }
+.l-footer-right { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; font-weight: 700; color: var(--border); letter-spacing: 0.1em; text-transform: uppercase; }
 
 /* ══════════════════════════════════════════════════
    DETAIL VIEW
@@ -429,37 +197,11 @@ header {
 .det-eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 0.58rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--text3); margin-bottom: 0.35rem; }
 .det-title { font-family: 'Cormorant Garamond', serif; font-size: 2.6rem; font-weight: 700; line-height: 1.08; margin-bottom: 1rem; color: var(--text); }
 
-/* OC link bar */
-.oc-bar {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  margin-bottom: 1rem;
-}
-.oc-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.38rem 0.9rem;
-  background: var(--gemini-lt);
-  border: 1px solid var(--gemini);
-  border-radius: var(--r);
-  color: var(--gemini);
-  text-decoration: none;
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.65rem;
-  font-weight: 500;
-  transition: all 0.15s;
-  letter-spacing: 0.04em;
-}
+.oc-bar { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem; }
+.oc-link { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.38rem 0.9rem; background: var(--gemini-lt); border: 1px solid var(--gemini); border-radius: var(--r); color: var(--gemini); text-decoration: none; font-family: 'JetBrains Mono', monospace; font-size: 0.65rem; font-weight: 500; transition: all 0.15s; letter-spacing: 0.04em; }
 .oc-link:hover { background: #d0ddef; }
 .oc-link svg { width: 11px; height: 11px; flex-shrink: 0; }
-.oc-uuid {
-  font-family: 'JetBrains Mono', monospace;
-  font-size: 0.6rem;
-  color: var(--text3);
-  letter-spacing: 0.04em;
-}
+.oc-uuid { font-family: 'JetBrains Mono', monospace; font-size: 0.6rem; color: var(--text3); letter-spacing: 0.04em; }
 
 .badges { display: flex; gap: 0.4rem; flex-wrap: wrap; margin-bottom: 1.8rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); align-items: center; }
 .badge { font-family: 'JetBrains Mono', monospace; font-size: 0.62rem; padding: 0.22em 0.65em; border-radius: 3px; border: 1px solid var(--border2); color: var(--text3); background: var(--surface2); }
@@ -565,15 +307,32 @@ header {
     <div class="sidebar-top">
       <div class="slabel">Artifacts</div>
       <input class="search" id="search" type="text" placeholder="Filter by name or project&hellip;">
-      <div class="sidebar-filters" id="sf">
-        <button class="sf-chip sf-active" data-f="all">All</button>
-        <button class="sf-chip" data-f="uses">
-          <span style="display:inline-flex;align-items:center;gap:0.3rem">
-            <span style="width:6px;height:6px;border-radius:50%;background:var(--accent);display:inline-block"></span>
-            With uses
-          </span>
-        </button>
-        <button class="sf-chip" data-f="no-uses">No uses</button>
+      <div class="sf-filter-rows" id="sf">
+        <div class="sf-row">
+          <span class="sf-row-label">Version</span>
+          <div class="sf-chips">
+            <button class="sf-chip sf-active-all" data-group="version" data-v="all">All</button>
+            <button class="sf-chip" data-group="version" data-v="v4">v4</button>
+            <button class="sf-chip" data-group="version" data-v="v1">v1</button>
+          </div>
+        </div>
+        <div class="sf-row">
+          <span class="sf-row-label">Uses</span>
+          <div class="sf-chips">
+            <button class="sf-chip sf-active-all" data-group="uses" data-v="all">All</button>
+            <button class="sf-chip" data-group="uses" data-v="has">
+              <span style="display:inline-flex;align-items:center;gap:0.28rem"><span style="width:5px;height:5px;border-radius:50%;background:currentColor;display:inline-block"></span>With</span>
+            </button>
+            <button class="sf-chip" data-group="uses" data-v="none">None</button>
+          </div>
+        </div>
+        <div class="sf-divider"></div>
+        <div class="sf-row" style="align-items:flex-start">
+          <span class="sf-row-label" style="padding-top:0.2em">Type</span>
+          <div class="sf-chips" id="sf-type-chips">
+            <button class="sf-chip sf-active-all" data-group="type" data-v="all">All</button>
+          </div>
+        </div>
       </div>
     </div>
     <div class="art-list" id="art-list">
@@ -585,8 +344,8 @@ header {
 </div>
 
 <script>
-let DATA = null, cur = 0, STATS = {}, SF = 'all';
-let F = { models: new Set(), modes: new Set(), prompts: new Set() };
+let DATA = null, cur = 0, STATS = {}, F = { models: new Set(), modes: new Set(), prompts: new Set() };
+let SF = { version: 'all', uses: 'all', type: 'all' };
 
 const PROMPT_TEXTS = {
   archaeological:`You are writing a use-hypothesis section for an archaeological site report.
@@ -666,6 +425,11 @@ function dedupeImgs(imgs) {
   });
 }
 
+function getArtType(a) {
+  const kf = a.key_fields || a.text_fields || {};
+  return kf.item_class_label || '';
+}
+
 fetch('./combined_data.json').then(r => r.json()).then(init).catch(e => {
   document.getElementById('main').innerHTML = `<div style="padding:3rem;color:var(--text3);font-style:italic;text-align:center">Failed to load combined_data.json<br><span style="font-family:JetBrains Mono,monospace;font-size:0.75rem">${e.message}</span></div>`;
   document.getElementById('art-list').innerHTML = `<div style="padding:1.5rem;color:var(--text3);font-style:italic;font-size:0.88rem;text-align:center">No data</div>`;
@@ -685,6 +449,19 @@ function init(data) {
   const projs = new Set(arts.map(a => a.project)).size;
   document.getElementById('hstats').innerHTML =
     `${arts.length} artifacts &middot; ${STATS.with_llm||0} with AI uses<br>${models.map(ML).join(' &middot; ')}`;
+
+  // populate type chips from actual data
+  const types = [...new Set(arts.map(getArtType).filter(Boolean))].sort();
+  const typeChips = document.getElementById('sf-type-chips');
+  types.forEach(t => {
+    const btn = document.createElement('button');
+    btn.className = 'sf-chip';
+    btn.dataset.group = 'type';
+    btn.dataset.v = t;
+    btn.textContent = t;
+    typeChips.appendChild(btn);
+  });
+
   renderSidebar(arts);
   showLanding(arts, projs, models);
   setupSidebarFilters();
@@ -693,9 +470,26 @@ function init(data) {
 // ── SIDEBAR FILTERS ───────────────────────────────────────────────────────
 function setupSidebarFilters() {
   document.getElementById('sf').addEventListener('click', e => {
-    const btn = e.target.closest('[data-f]'); if (!btn) return;
-    SF = btn.dataset.f;
-    document.querySelectorAll('.sf-chip').forEach(b => b.classList.toggle('sf-active', b.dataset.f === SF));
+    const btn = e.target.closest('[data-group]'); if (!btn) return;
+    const group = btn.dataset.group;
+    const val   = btn.dataset.v;
+
+    SF[group] = val;
+
+    // update active classes for this group
+    document.querySelectorAll(`[data-group="${group}"]`).forEach(b => {
+      b.classList.remove('sf-active-all','sf-active-uses','sf-active-nouses','sf-active-ver','sf-active-type');
+    });
+
+    if (group === 'uses') {
+      btn.classList.add(val === 'all' ? 'sf-active-all' : val === 'has' ? 'sf-active-uses' : 'sf-active-nouses');
+    } else if (group === 'version') {
+      btn.classList.add(val === 'all' ? 'sf-active-all' : 'sf-active-ver');
+      if (val === 'v1') btn.classList.add('v1');
+    } else if (group === 'type') {
+      btn.classList.add(val === 'all' ? 'sf-active-all' : 'sf-active-type');
+    }
+
     renderSidebar(DATA.artifacts, document.getElementById('search').value);
   });
 }
@@ -705,8 +499,12 @@ function renderSidebar(arts, q = '') {
   let filtered = arts.filter(a => {
     const matchQ = !q || a.name.toLowerCase().includes(q.toLowerCase()) ||
       (a.project||'').toLowerCase().includes(q.toLowerCase());
-    const matchF = SF === 'all' ? true : SF === 'uses' ? a.has_llm : !a.has_llm;
-    return matchQ && matchF;
+    const matchUses = SF.uses === 'all' ? true : SF.uses === 'has' ? a.has_llm : !a.has_llm;
+    const src = a.dataset_source || 'v4';
+    const matchVersion = SF.version === 'all' ? true : SF.version === src;
+    const artType = getArtType(a);
+    const matchType = SF.type === 'all' ? true : artType === SF.type;
+    return matchQ && matchUses && matchVersion && matchType;
   });
   list.innerHTML = filtered.length ? filtered.map(a => {
     const idx   = DATA.artifacts.indexOf(a);
@@ -743,16 +541,12 @@ function showLanding(arts, projs, models) {
 
   document.getElementById('main').innerHTML = `
 <div class="landing">
-
   <div class="l-hero">
     <div class="l-hero-grid"></div>
     <div class="l-hero-content">
       <div class="l-pre">ArchAIa &middot; CMU Language Technologies Institute</div>
       <div class="l-title">Archaeological<br>artifacts &amp;<br><span>AI-generated</span><br>use hypotheses.</div>
-      <div class="l-body">
-        A sample of ${arts.length || '—'} artifacts drawn from the OpenContext database,
-        with recovered metadata and AI-generated use hypotheses for a selected set of objects. 
-      </div>
+      <div class="l-body">A sample of ${arts.length || '—'} artifacts drawn from the OpenContext database, with recovered metadata and AI-generated use hypotheses for a selected set of objects.</div>
       <div class="l-stats">
         <div class="l-stat"><div class="l-stat-n">${arts.length || '—'}</div><div class="l-stat-l">Artifacts</div></div>
         <div class="l-stat"><div class="l-stat-n">${STATS.with_llm || '—'}</div><div class="l-stat-l">With AI uses</div></div>
@@ -767,7 +561,6 @@ function showLanding(arts, projs, models) {
   </div>
 
   <div class="l-body-wrap">
-
     <div>
       <div class="l-section-head">Using this browser</div>
       <div class="l-features">
@@ -775,7 +568,7 @@ function showLanding(arts, projs, models) {
           <div class="l-feat-num">01</div>
           <div class="l-feat-content">
             <div class="l-feat-title">Browse the artifact list</div>
-            <div class="l-feat-desc">The sidebar lists all artifacts in the sample. Click any entry to open its full record. Use the search box to filter by name or excavation project. Use the filter chips to show only artifacts with AI-generated uses, or only those without.</div>
+            <div class="l-feat-desc">The sidebar lists all artifacts in the sample. Click any entry to open its full record. Use the search box to filter by name or excavation project. Use the filter rows to narrow by dataset version, use status, or artifact class.</div>
           </div>
         </div>
         <div class="l-feat">
@@ -789,21 +582,21 @@ function showLanding(arts, projs, models) {
           <div class="l-feat-num">03</div>
           <div class="l-feat-content">
             <div class="l-feat-title">Open the record in OpenContext</div>
-            <div class="l-feat-desc">Every artifact with a UUID shows a "View on OpenContext" button directly below its title. Click it to open the full source record in a new tab for verification. The full UUID is shown alongside.</div>
+            <div class="l-feat-desc">Every artifact with a UUID shows a "View on OpenContext" button directly below its title. Click it to open the full source record in a new tab for verification.</div>
           </div>
         </div>
         <div class="l-feat">
           <div class="l-feat-num">04</div>
           <div class="l-feat-content">
             <div class="l-feat-title">Compare AI outputs across models and prompts</div>
-            <div class="l-feat-desc">For artifacts with generated uses, use the filter chips to compare outputs by model (GPT-4o-mini vs Gemini Flash Lite), input mode (sparse metadata only vs full metadata plus images), and prompt style (archaeological report, museum label, or generative narrative).</div>
+            <div class="l-feat-desc">For artifacts with generated uses, use the filter chips to compare outputs by model, input mode, and prompt style.</div>
           </div>
         </div>
         <div class="l-feat">
           <div class="l-feat-num">05</div>
           <div class="l-feat-content">
             <div class="l-feat-title">Expand metadata and enlarge images</div>
-            <div class="l-feat-desc">Key fields are shown by default. Click "Show all fields" to see the complete recovered metadata including fabric, Munsell color, locus, and coordinates. Click any image to open it full-screen. Press Escape to close.</div>
+            <div class="l-feat-desc">Key fields are shown by default. Click "Show all fields" to see complete recovered metadata. Click any image to open it full-screen. Press Escape to close.</div>
           </div>
         </div>
       </div>
@@ -818,15 +611,15 @@ function showLanding(arts, projs, models) {
         </div>
         <div class="l-badge-row">
           <div><span class="l-badge-sample lbs-v1">v1 &middot; no location / date</span></div>
-          <div class="l-badge-desc"><strong>Dataset v1 only</strong> &mdash; this is an older dataset which contains a few artifacts of interest which are not in v4 due to the filtering criteria. It appears here because it was included in the AI use generation study. Metadata may be incomplete.</div>
+          <div class="l-badge-desc"><strong>Dataset v1 only</strong> &mdash; this is an older dataset which contains a few artifacts of interest not in v4 due to the filtering criteria. Metadata may be incomplete.</div>
         </div>
         <div class="l-badge-row">
           <div><span class="l-badge-sample lbs-uses">&#10022; Generated Uses Available</span></div>
-          <div class="l-badge-desc"><strong>AI use hypotheses</strong> &mdash; AI-generated interpretations of the artifact's possible functions, produced by multiple models across different prompt styles and input modes. </div>
+          <div class="l-badge-desc"><strong>AI use hypotheses</strong> &mdash; AI-generated interpretations of the artifact's possible functions, produced by multiple models across different prompt styles and input modes.</div>
         </div>
         <div class="l-badge-row">
           <div><span class="l-badge-sample lbs-oc">&#8599; View on OpenContext</span></div>
-          <div class="l-badge-desc"><strong>Source record</strong> &mdash; a direct link to the artifact's full record in OpenContext. Use this to verify metadata, check the original images, or cross-reference with the source database.</div>
+          <div class="l-badge-desc"><strong>Source record</strong> &mdash; a direct link to the artifact's full record in OpenContext.</div>
         </div>
         <div class="l-badge-row">
           <div><div class="lbs-dot"><div class="lbs-dot-c"></div> dot in sidebar</div></div>
@@ -864,8 +657,7 @@ function showLanding(arts, projs, models) {
         </tbody>
       </table>
       <div style="margin-top:0.9rem;font-size:0.85rem;color:var(--text3);line-height:1.7;">
-        <strong>Sparse</strong> mode provides only key fields (label, material, object type, size, condition, period, dates).
-        <strong>Full + Images</strong> mode provides all recovered metadata plus up to three images.
+        <strong>Sparse</strong> mode provides only key fields. <strong>Full + Images</strong> mode provides all recovered metadata plus up to three images.
       </div>
     </div>
 
@@ -914,17 +706,12 @@ function showLanding(arts, projs, models) {
         </div>
       </div>
     </div>
-
   </div>
 
   <div class="l-footer">
-    <div class="l-footer-left">
-      ArchAIa &middot; CMU Language Technologies Institute<br>
-      April 2026
-    </div>
+    <div class="l-footer-left">ArchAIa &middot; CMU Language Technologies Institute<br>April 2026</div>
     <div class="l-footer-right">Archaia</div>
   </div>
-
 </div>`;
 }
 
