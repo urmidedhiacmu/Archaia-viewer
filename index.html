@@ -465,6 +465,19 @@ function init(data) {
   renderSidebar(arts);
   showLanding(arts, projs, models);
   setupSidebarFilters();
+
+  const uuidParam = new URLSearchParams(window.location.search).get('uuid');
+  if (uuidParam) {
+    const idx = arts.findIndex(a =>
+      (a.extra_fields?.uuid_hex || a.key_fields?.uuid_hex || '').replace(/[^a-f0-9-]/gi, '') === uuidParam
+    );
+    if (idx !== -1) selectArt(idx);
+  }
+
+  window.addEventListener('popstate', e => {
+    if (e.state?.idx != null) selectArt(e.state.idx);
+    else showLanding();
+  });
 }
 
 // ── SIDEBAR FILTERS ───────────────────────────────────────────────────────
@@ -528,6 +541,10 @@ function selectArt(idx) {
   cur = idx;
   renderSidebar(DATA.artifacts, document.getElementById('search').value);
   show(idx);
+  const a = DATA.artifacts[idx];
+  const uuid = (a?.extra_fields?.uuid_hex || a?.key_fields?.uuid_hex || '').replace(/[^a-f0-9-]/gi, '');
+  if (uuid) history.pushState({ idx }, '', `?uuid=${uuid}`);
+  else history.pushState({ idx }, '', window.location.pathname);
 }
 
 document.getElementById('search').addEventListener('input', e =>
