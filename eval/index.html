@@ -8,140 +8,124 @@
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;0,700;1,300;1,400;1,600&family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,600;1,8..60,300&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/plotly.js/2.27.0/plotly.min.js"></script>
 <style>
-:root {
-  --bg:        #F6F2EB;
-  --surface:   #FFFFFF;
-  --surface2:  #F0EAE0;
-  --border:    #DDD5C5;
-  --border2:   #C5B89E;
-  --text:      #18100A;
-  --text2:     #3E3020;
-  --text3:     #897560;
-  --accent:    #7D3A10;
-  --accent-lt: #F5EBE0;
-  --gold:      #9A7228;
-  --gold-lt:   #FDF6E3;
-  --green:     #2d6a4f;
-  --green-lt:  #e8f5ee;
-  --blue:      #1848A0;
-  --blue-lt:   #E8EFFA;
-  --red:       #c0392b;
-  --red-lt:    #fdecea;
-  --r:         6px;
-  --sidebar:   260px;
+:root{
+  --bg:#F6F2EB;--surface:#FFFFFF;--surface2:#F0EAE0;
+  --border:#DDD5C5;--border2:#C5B89E;
+  --text:#18100A;--text2:#3E3020;--text3:#897560;
+  --accent:#7D3A10;--accent-lt:#F5EBE0;
+  --gold:#9A7228;--gold-lt:#FDF6E3;
+  --teal:#0B5563;--teal-lt:#E3F2F5;
+  --plum:#6B2D6B;--plum-lt:#F5E8F5;
+  --r:6px;--sidebar:240px;
 }
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%;overflow:hidden}
 body{font-family:'Source Serif 4',Georgia,serif;background:var(--bg);color:var(--text);font-size:15px}
 
-header{
-  position:fixed;top:0;left:0;right:0;z-index:100;
-  height:58px;background:var(--surface);border-bottom:2px solid var(--border);
-  display:flex;align-items:center;justify-content:space-between;padding:0 1.75rem;
-}
-.logo{display:flex;align-items:baseline;gap:0.65rem;cursor:pointer}
+header{position:fixed;top:0;left:0;right:0;z-index:100;height:58px;background:var(--surface);border-bottom:2px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 1.75rem}
+.logo{display:flex;align-items:baseline;gap:0.65rem}
 .logo-name{font-family:'Cormorant Garamond',serif;font-size:1.55rem;font-weight:700;letter-spacing:0.14em;color:var(--accent);text-transform:uppercase}
-.logo-div{color:var(--border2);font-size:1.1rem}
+.logo-div{color:var(--border2)}
 .logo-sub{font-family:'Cormorant Garamond',serif;font-size:1rem;font-style:italic;color:var(--text3)}
-.hright{display:flex;align-items:center;gap:1rem}
-.back-btn{padding:0.38rem 1rem;background:transparent;color:var(--text3);border:1px solid var(--border2);border-radius:var(--r);font-family:'JetBrains Mono',monospace;font-size:0.68rem;letter-spacing:0.06em;cursor:pointer;text-transform:uppercase;text-decoration:none;display:inline-flex;align-items:center}
+.back-btn{padding:0.38rem 1rem;background:transparent;color:var(--text3);border:1px solid var(--border2);border-radius:var(--r);font-family:'JetBrains Mono',monospace;font-size:0.68rem;letter-spacing:0.06em;cursor:pointer;text-transform:uppercase;text-decoration:none;transition:all 0.15s}
 .back-btn:hover{color:var(--accent);border-color:var(--accent);background:var(--accent-lt)}
 
 .app{position:fixed;top:58px;left:0;right:0;bottom:0;display:grid;grid-template-columns:var(--sidebar) 1fr}
-
 .sidebar{background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
 .sidebar-top{padding:0.9rem 1.1rem 0.7rem;border-bottom:1px solid var(--border);flex-shrink:0}
 .slabel{font-family:'JetBrains Mono',monospace;font-size:0.56rem;text-transform:uppercase;letter-spacing:0.16em;color:var(--text3);margin-bottom:0.5rem}
-
 .tab-nav{display:flex;flex-direction:column;gap:2px;padding:0.5rem}
-.tab-btn{padding:0.6rem 1rem;border:none;background:transparent;text-align:left;font-family:'Source Serif 4',serif;font-size:0.9rem;color:var(--text2);cursor:pointer;border-radius:var(--r);transition:all 0.12s;border-left:3px solid transparent}
+.tab-btn{padding:0.6rem 1rem;border:none;background:transparent;text-align:left;font-family:'Source Serif 4',serif;font-size:0.9rem;color:var(--text2);cursor:pointer;border-radius:var(--r);border-left:3px solid transparent;transition:all 0.12s}
 .tab-btn:hover{background:var(--surface2)}
 .tab-btn.active{border-left-color:var(--accent);background:var(--accent-lt);color:var(--accent);font-weight:600}
-
-.run-selector{padding:0.7rem 1.1rem;border-top:1px solid var(--border);flex-shrink:0}
+.run-section{padding:0.7rem 1.1rem;border-top:1px solid var(--border);flex-shrink:0}
 .run-item{display:flex;align-items:center;gap:0.5rem;padding:0.3rem 0;font-family:'JetBrains Mono',monospace;font-size:0.65rem;cursor:pointer}
 .run-item input{accent-color:var(--accent)}
-.run-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0}
+.run-dot{width:9px;height:9px;border-radius:50%;flex-shrink:0}
 
 .main{overflow-y:auto;background:var(--bg)}
 .main::-webkit-scrollbar{width:5px}
 .main::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
-
-.panel{display:none;padding:2rem 2.5rem;animation:fadeIn 0.2s ease}
+.panel{display:none;padding:2rem 2.5rem 4rem;animation:fi 0.2s ease}
 .panel.active{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+@keyframes fi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
 
-.panel-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--text);margin-bottom:0.3rem}
-.panel-sub{font-size:0.9rem;color:var(--text3);margin-bottom:2rem;font-style:italic}
-
-.metric-chips{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1.5rem}
-.mchip{font-family:'JetBrains Mono',monospace;font-size:0.62rem;padding:0.22em 0.75em;border-radius:3px;border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;transition:all 0.12s;text-transform:uppercase;letter-spacing:0.04em}
-.mchip:hover{border-color:var(--text2);color:var(--text2)}
-.mchip.active{background:var(--accent);border-color:var(--accent);color:white}
-
-.chart-box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;margin-bottom:1.5rem}
-.chart-title{font-family:'JetBrains Mono',monospace;font-size:0.6rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--text3);margin-bottom:0.8rem}
-
-.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem}
-
-.summary-table{width:100%;border-collapse:collapse;font-size:0.85rem}
-.summary-table th{font-family:'JetBrains Mono',monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);text-align:left;padding:0.5rem 0.8rem;border-bottom:2px solid var(--border);background:var(--surface)}
-.summary-table td{padding:0.5rem 0.8rem;border-bottom:1px solid var(--border);vertical-align:top}
-.summary-table tr:hover td{background:var(--surface2)}
-.em-badge{font-family:'JetBrains Mono',monospace;font-size:0.7rem;padding:0.15em 0.55em;border-radius:3px}
-.em-high{background:var(--green-lt);color:var(--green)}
-.em-mid{background:var(--gold-lt);color:var(--gold)}
-.em-low{background:var(--red-lt);color:var(--red)}
-
-.field-selector{display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:1.2rem}
-.fchip{font-family:'JetBrains Mono',monospace;font-size:0.6rem;padding:0.2em 0.65em;border-radius:3px;border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;transition:all 0.12s}
-.fchip.active{background:var(--gold);border-color:var(--gold);color:white}
-
-.artifact-list{display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.5rem;max-height:320px;overflow-y:auto}
-.art-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:0.8rem 1rem;cursor:pointer;transition:all 0.12s;border-left:3px solid transparent}
-.art-card:hover{border-left-color:var(--border2);background:var(--surface2)}
-.art-card.correct{border-left-color:var(--green)}
-.art-card.wrong{border-left-color:var(--red)}
-.art-card.selected{border-left-color:var(--accent);background:var(--accent-lt)}
-.art-label{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600}
-.art-meta{font-size:0.75rem;color:var(--text3);font-style:italic;margin-top:0.1rem}
-.art-scores{display:flex;gap:0.5rem;margin-top:0.3rem;flex-wrap:wrap}
-.score-tag{font-family:'JetBrains Mono',monospace;font-size:0.58rem;padding:0.1em 0.5em;border-radius:2px;background:var(--surface2);color:var(--text3)}
-
-.detail-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem 1.6rem;margin-bottom:1.5rem}
-.detail-field{font-family:'JetBrains Mono',monospace;font-size:0.62rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:0.3rem}
-.detail-gt{font-size:0.95rem;line-height:1.65;color:var(--text);margin-bottom:0.8rem;padding:0.6rem 0.8rem;background:var(--green-lt);border-radius:var(--r);border-left:3px solid var(--green)}
-.detail-pred{font-size:0.95rem;line-height:1.65;color:var(--text);margin-bottom:0.8rem;padding:0.6rem 0.8rem;border-radius:var(--r);border-left:3px solid var(--accent);background:var(--accent-lt)}
-.detail-pred.correct{border-left-color:var(--green);background:var(--green-lt)}
-.detail-scores{display:flex;gap:1rem;flex-wrap:wrap;font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text3)}
-.detail-scores span strong{color:var(--text2)}
-.top3-list{display:flex;gap:0.4rem;flex-wrap:wrap;margin-bottom:0.6rem}
-.top3-item{font-family:'JetBrains Mono',monospace;font-size:0.62rem;padding:0.18em 0.55em;border-radius:3px;background:var(--surface2);color:var(--text2);border:1px solid var(--border)}
-.top3-item.match{background:var(--green-lt);border-color:var(--green);color:var(--green)}
-
-.filter-row{display:flex;gap:0.6rem;align-items:center;margin-bottom:1rem;flex-wrap:wrap}
-.filter-toggle{font-family:'JetBrains Mono',monospace;font-size:0.62rem;padding:0.22em 0.75em;border-radius:3px;border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;text-transform:uppercase;letter-spacing:0.04em;transition:all 0.12s}
-.filter-toggle.active{background:var(--red);border-color:var(--red);color:white}
-.search-input{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:0.3rem 0.7rem;font-family:'Source Serif 4',serif;font-size:0.88rem;color:var(--text);outline:none;flex:1;min-width:160px}
-.search-input:focus{border-color:var(--accent)}
+.panel-title{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;margin-bottom:0.2rem}
+.panel-sub{font-size:0.9rem;color:var(--text3);font-style:italic;margin-bottom:1.8rem}
 
 .stat-row{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:2rem}
 .stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1rem 1.2rem}
 .stat-n{font-family:'Cormorant Garamond',serif;font-size:2rem;font-weight:700;color:var(--accent);line-height:1}
-.stat-l{font-family:'JetBrains Mono',monospace;font-size:0.52rem;text-transform:uppercase;letter-spacing:0.12em;color:var(--text3);margin-top:0.2rem}
+.stat-l{font-family:'JetBrains Mono',monospace;font-size:0.52rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-top:0.2rem}
+
+.mchips{display:flex;flex-wrap:wrap;gap:0.4rem;margin-bottom:1.2rem}
+.chip{font-family:'JetBrains Mono',monospace;font-size:0.6rem;padding:0.22em 0.7em;border-radius:3px;border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;text-transform:uppercase;letter-spacing:0.04em;transition:all 0.12s}
+.chip:hover{border-color:var(--text2);color:var(--text2)}
+.chip.active{background:var(--accent);border-color:var(--accent);color:white}
+.chip.teal{background:var(--teal);border-color:var(--teal);color:white}
+.chip.plum{background:var(--plum);border-color:var(--plum);color:white}
+
+.box{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.2rem;margin-bottom:1.5rem}
+.box-title{font-family:'JetBrains Mono',monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.14em;color:var(--text3);margin-bottom:0.8rem}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;margin-bottom:1.5rem}
+
+.tbl{width:100%;border-collapse:collapse;font-size:0.85rem}
+.tbl th{font-family:'JetBrains Mono',monospace;font-size:0.56rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);text-align:left;padding:0.5rem 0.8rem;border-bottom:2px solid var(--border);background:var(--surface)}
+.tbl td{padding:0.5rem 0.8rem;border-bottom:1px solid var(--border)}
+.tbl tr:hover td{background:var(--surface2)}
+.badge{font-family:'JetBrains Mono',monospace;font-size:0.68rem;padding:0.15em 0.55em;border-radius:3px}
+.badge-hi{background:var(--teal-lt);color:var(--teal)}
+.badge-md{background:var(--gold-lt);color:var(--gold)}
+.badge-lo{background:var(--accent-lt);color:var(--accent)}
+
+.art-list{display:flex;flex-direction:column;gap:0.4rem;max-height:400px;overflow-y:auto;padding-right:4px}
+.art-list::-webkit-scrollbar{width:3px}
+.art-list::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px}
+.art-item{padding:0.7rem 1rem;background:var(--surface);border:1px solid var(--border);border-radius:var(--r);cursor:pointer;border-left:3px solid transparent;transition:all 0.12s}
+.art-item:hover{background:var(--surface2)}
+.art-item.ok{border-left-color:var(--teal)}
+.art-item.err{border-left-color:var(--accent)}
+.art-item.sel{background:var(--accent-lt);border-left-color:var(--accent)}
+.art-name{font-family:'Cormorant Garamond',serif;font-size:1rem;font-weight:600}
+.art-meta{font-size:0.72rem;color:var(--text3);font-style:italic;margin-top:0.1rem}
+.art-scores{display:flex;gap:0.4rem;margin-top:0.35rem;flex-wrap:wrap}
+.sc{font-family:'JetBrains Mono',monospace;font-size:0.56rem;padding:0.1em 0.45em;border-radius:2px;background:var(--surface2);color:var(--text3)}
+
+.detail{background:var(--surface);border:1px solid var(--border);border-radius:var(--r);padding:1.4rem}
+.det-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1.2rem}
+.det-name{font-family:'Cormorant Garamond',serif;font-size:1.3rem;font-weight:700}
+.det-meta{font-size:0.78rem;color:var(--text3);font-style:italic;margin-top:0.15rem}
+.match-pill{font-family:'JetBrains Mono',monospace;font-size:0.65rem;padding:3px 10px;border-radius:3px}
+.match-pill.ok{background:var(--teal-lt);color:var(--teal);border:1px solid var(--teal)}
+.match-pill.err{background:var(--accent-lt);color:var(--accent);border:1px solid var(--accent)}
+.det-label{font-family:'JetBrains Mono',monospace;font-size:0.58rem;text-transform:uppercase;letter-spacing:0.1em;color:var(--text3);margin-bottom:0.3rem;margin-top:0.8rem}
+.det-val{font-size:0.92rem;line-height:1.65;padding:0.55rem 0.8rem;border-radius:var(--r);border-left:3px solid var(--border2);background:var(--surface2);color:var(--text)}
+.det-val.gt{border-left-color:var(--teal);background:var(--teal-lt)}
+.det-val.pred-ok{border-left-color:var(--teal);background:var(--teal-lt)}
+.det-val.pred-err{border-left-color:var(--accent);background:var(--accent-lt)}
+.top3wrap{display:flex;gap:0.35rem;flex-wrap:wrap;margin-top:0.5rem}
+.t3{font-family:'JetBrains Mono',monospace;font-size:0.6rem;padding:0.15em 0.5em;border-radius:3px;background:var(--surface2);border:1px solid var(--border);color:var(--text2)}
+.t3.match{background:var(--teal-lt);border-color:var(--teal);color:var(--teal)}
+.det-scores{display:flex;gap:1.2rem;flex-wrap:wrap;margin-top:1rem;font-family:'JetBrains Mono',monospace;font-size:0.7rem;color:var(--text3);padding-top:0.8rem;border-top:1px solid var(--border)}
+.det-scores strong{color:var(--text2)}
+
+.frow{display:flex;gap:0.5rem;align-items:center;margin-bottom:0.9rem;flex-wrap:wrap}
+.ftoggle{font-family:'JetBrains Mono',monospace;font-size:0.6rem;padding:0.22em 0.7em;border-radius:3px;border:1px solid var(--border2);background:transparent;color:var(--text3);cursor:pointer;text-transform:uppercase;transition:all 0.12s}
+.ftoggle.on{background:var(--accent);border-color:var(--accent);color:white}
+.fsearch{background:var(--bg);border:1px solid var(--border);border-radius:var(--r);padding:0.3rem 0.7rem;font-family:'Source Serif 4',serif;font-size:0.88rem;color:var(--text);outline:none;flex:1;min-width:160px}
+.fsearch:focus{border-color:var(--accent)}
+
+.empty{color:var(--text3);font-style:italic;padding:1.5rem 0;font-size:0.9rem}
 </style>
 </head>
 <body>
-
 <header>
-  <div class="logo" onclick="showTab('overview')">
+  <div class="logo">
     <span class="logo-name">Archaia</span>
-    <span class="logo-div">·</span>
+    <span class="logo-div" style="font-size:1.1rem;color:var(--border2)">·</span>
     <span class="logo-sub">Imputation Eval</span>
   </div>
-  <div class="hright">
-    <a class="back-btn" href="../index.html">← Artifact Browser</a>
-  </div>
+  <a class="back-btn" href="../index.html">← Artifact Browser</a>
 </header>
 
 <div class="app">
@@ -149,14 +133,14 @@ header{
     <div class="sidebar-top">
       <div class="slabel">Navigation</div>
       <div class="tab-nav">
-        <button class="tab-btn active" onclick="showTab('overview')">Overview</button>
-        <button class="tab-btn" onclick="showTab('deepdive')">Field Deep Dive</button>
-        <button class="tab-btn" onclick="showTab('browser')">Artifact Browser</button>
-        <button class="tab-btn" onclick="showTab('about')">About</button>
+        <button class="tab-btn active" id="tb-overview" onclick="showTab('overview')">Overview</button>
+        <button class="tab-btn" id="tb-compare" onclick="showTab('compare')">Compare Runs</button>
+        <button class="tab-btn" id="tb-browser" onclick="showTab('browser')">Artifact Browser</button>
+        <button class="tab-btn" id="tb-about" onclick="showTab('about')">About</button>
       </div>
     </div>
-    <div class="run-selector">
-      <div class="slabel" style="margin-bottom:0.6rem">Eval Runs</div>
+    <div class="run-section">
+      <div class="slabel" style="margin-bottom:0.5rem">Eval Runs</div>
       <div id="run-list"></div>
     </div>
   </aside>
@@ -166,528 +150,401 @@ header{
     <!-- OVERVIEW -->
     <div class="panel active" id="panel-overview">
       <div class="panel-title">Evaluation Overview</div>
-      <div class="panel-sub">DINOv2 + MiniLM retrieval · GPT-4o generation · 85/15 train/eval split · 100 artifacts per field</div>
-
+      <div class="panel-sub">DINOv2 + MiniLM retrieval · GPT-4o generation · 85/15 held-out split · 100 artifacts per field</div>
       <div class="stat-row" id="stat-row"></div>
-
-      <div class="metric-chips" id="metric-chips"></div>
-
-      <div class="chart-box">
-        <div class="chart-title">Per-field scores by run</div>
-        <div id="bar-chart" style="height:380px"></div>
+      <div class="slabel" style="margin-bottom:0.5rem">Metric</div>
+      <div class="mchips" id="metric-chips"></div>
+      <div class="box">
+        <div class="box-title">Per-field scores</div>
+        <div id="bar-chart" style="height:360px"></div>
       </div>
-
-      <div class="grid2">
-        <div class="chart-box">
-          <div class="chart-title">Overall radar (mean across fields)</div>
-          <div id="radar-chart" style="height:340px"></div>
-        </div>
-        <div class="chart-box">
-          <div class="chart-title">Summary table</div>
-          <div style="overflow-x:auto">
-            <table class="summary-table" id="summary-table">
-              <thead><tr></tr></thead>
-              <tbody></tbody>
-            </table>
-          </div>
-        </div>
+      <div class="box">
+        <div class="box-title">Summary table</div>
+        <div style="overflow-x:auto"><table class="tbl" id="summary-table"><thead><tr></tr></thead><tbody></tbody></table></div>
       </div>
     </div>
 
-    <!-- DEEP DIVE -->
-    <div class="panel" id="panel-deepdive">
-      <div class="panel-title">Field Deep Dive</div>
-      <div class="panel-sub">Per-artifact scatter plot and confusion matrix for each field</div>
+    <!-- COMPARE -->
+    <div class="panel" id="panel-compare">
+      <div class="panel-title">Compare Runs</div>
+      <div class="panel-sub">Select a field to see how top-15 vs top-50 neighbors affects predictions</div>
 
-      <div style="display:flex;gap:1rem;align-items:center;margin-bottom:1.2rem;flex-wrap:wrap">
-        <div>
-          <div class="slabel">Field</div>
-          <div class="field-selector" id="dd-field-chips"></div>
-        </div>
-        <div>
-          <div class="slabel">Run</div>
-          <div class="field-selector" id="dd-run-chips"></div>
-        </div>
+      <div style="margin-bottom:1rem">
+        <div class="slabel" style="margin-bottom:0.4rem">Field</div>
+        <div class="mchips" id="cmp-field-chips"></div>
+        <div class="slabel" style="margin-bottom:0.4rem;margin-top:0.8rem">Run (for scatter + confusion)</div>
+        <div class="mchips" id="cmp-run-chips"></div>
       </div>
 
-      <div class="grid2">
-        <div class="chart-box">
-          <div class="chart-title">Fuzzy match vs Semantic similarity · <span style="color:var(--green)">●</span> exact match · <span style="color:var(--red)">●</span> wrong</div>
-          <div id="scatter-chart" style="height:320px"></div>
-        </div>
-        <div class="chart-box">
-          <div class="chart-title">Confusion matrix</div>
-          <div id="confusion-chart" style="height:320px;overflow-y:auto"></div>
-        </div>
+      <div class="box">
+        <div class="box-title">Fuzzy match vs Semantic similarity — <span style="color:var(--teal)">● exact match</span> &nbsp; <span style="color:var(--accent)">● wrong</span></div>
+        <div id="scatter-chart" style="height:340px"></div>
+      </div>
+
+      <div class="box">
+        <div class="box-title">Confusion matrix — what does the model predict when it's wrong?</div>
+        <div id="confusion-chart" style="min-height:280px;overflow-y:auto"></div>
       </div>
     </div>
 
     <!-- BROWSER -->
     <div class="panel" id="panel-browser">
       <div class="panel-title">Artifact Browser</div>
-      <div class="panel-sub">Browse individual predictions — ground truth vs predicted</div>
+      <div class="panel-sub">Click any artifact to see the full prediction vs ground truth</div>
 
-      <div style="display:flex;gap:1rem;align-items:flex-start;flex-wrap:wrap;margin-bottom:1rem">
+      <div style="display:flex;gap:2rem;flex-wrap:wrap;margin-bottom:1rem">
         <div>
-          <div class="slabel">Field</div>
-          <div class="field-selector" id="br-field-chips"></div>
+          <div class="slabel" style="margin-bottom:0.4rem">Field</div>
+          <div class="mchips" id="br-field-chips"></div>
         </div>
         <div>
-          <div class="slabel">Run</div>
-          <div class="field-selector" id="br-run-chips"></div>
+          <div class="slabel" style="margin-bottom:0.4rem">Run</div>
+          <div class="mchips" id="br-run-chips"></div>
         </div>
       </div>
 
-      <div class="filter-row">
-        <button class="filter-toggle" id="errors-toggle" onclick="toggleErrors()">Errors only</button>
-        <input class="search-input" id="artifact-search" placeholder="Search by label or ground truth…" oninput="renderArtifactList()">
+      <div class="frow">
+        <button class="ftoggle" id="err-toggle" onclick="toggleErrors()">Errors only</button>
+        <input class="fsearch" id="art-search" placeholder="Search by label or ground truth…" oninput="renderList()">
       </div>
 
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:start">
         <div>
-          <div class="slabel" style="margin-bottom:0.5rem">Artifacts</div>
-          <div class="artifact-list" id="artifact-list"></div>
+          <div class="slabel" style="margin-bottom:0.5rem" id="list-count"></div>
+          <div class="art-list" id="art-list"></div>
         </div>
-        <div id="artifact-detail">
-          <div style="color:var(--text3);font-style:italic;padding:2rem 0">Select an artifact</div>
-        </div>
+        <div id="art-detail"><div class="empty">Click an artifact to see details</div></div>
       </div>
     </div>
 
-    <!-- ABOUT -->
-    <div class="panel" id="panel-about">
-      <div class="panel-title">About this Pipeline</div>
-      <div class="panel-sub">ArchAIa · CMU Language Technologies Institute · April 2026</div>
+  <!-- ABOUT -->
+  <div class="panel" id="panel-about">
+    <div class="panel-title">About this Pipeline</div>
+    <div class="panel-sub">ArchAIa · CMU Language Technologies Institute · April 2026</div>
 
-      <div class="chart-box" style="max-width:760px">
-        <div class="chart-title">Architecture</div>
-        <p style="font-size:0.92rem;line-height:1.8;color:var(--text2);margin-bottom:1rem">
-          The pipeline fills missing metadata fields for archaeological artifacts from the OpenContext database using a retrieval-augmented multimodal generation approach.
-        </p>
-        <p style="font-size:0.92rem;line-height:1.8;color:var(--text2);margin-bottom:1rem">
-          <strong>Encoding:</strong> Each v4 artifact is encoded as a 1408-dim vector — DINOv2 ViT-L/14 image embedding (1024-dim) concatenated with all-MiniLM-L6-v2 text embedding (384-dim) from available metadata fields.
-        </p>
-        <p style="font-size:0.92rem;line-height:1.8;color:var(--text2);margin-bottom:1rem">
-          <strong>Index:</strong> FAISS flat index (IndexFlatIP) built on the 85% train split of v4 (19,215 artifacts). The remaining 15% (3,392 artifacts) are genuinely held out as the eval set — never seen by the index.
-        </p>
-        <p style="font-size:0.92rem;line-height:1.8;color:var(--text2);margin-bottom:1rem">
-          <strong>Retrieval:</strong> Top-N most similar artifacts retrieved, filtered to only those with the target field populated.
-        </p>
-        <p style="font-size:0.92rem;line-height:1.8;color:var(--text2)">
-          <strong>Generation:</strong> GPT-4o receives the artifact image + available fields + retrieved neighbors as structured JSON context, plus a constrained vocabulary derived from train split distributions.
-        </p>
-      </div>
-
-      <div class="chart-box" style="max-width:760px;margin-top:1.5rem">
-        <div class="chart-title">Target Fields</div>
-        <table class="summary-table">
-          <thead><tr><th>Field</th><th>Type</th><th>Coverage in v4</th><th>Notes</th></tr></thead>
-          <tbody>
-            <tr><td>recovered_material</td><td>Categorical</td><td>38.6%</td><td>Visually inferrable from images</td></tr>
-            <tr><td>recovered_object_type</td><td>Categorical</td><td>29.3%</td><td>Hierarchical types e.g. Architectural::Cover Tile</td></tr>
-            <tr><td>recovered_condition</td><td>Mixed</td><td>33.3%</td><td>Controlled vocab + free text sentences</td></tr>
-            <tr><td>recovered_period</td><td>Categorical</td><td>7.7%</td><td>Strong project-level signal</td></tr>
-            <tr><td>recovered_description</td><td>Free text</td><td>45.4%</td><td>Evaluated with semantic similarity + BLEU</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div class="chart-box" style="max-width:760px;margin-top:1.5rem">
-        <div class="chart-title">Metrics</div>
-        <table class="summary-table">
-          <thead><tr><th>Metric</th><th>Description</th></tr></thead>
-          <tbody>
-            <tr><td>Exact Match</td><td>Strict case-insensitive string equality</td></tr>
-            <tr><td>Fuzzy Match</td><td>Token sort ratio — handles word order variation</td></tr>
-            <tr><td>Semantic Similarity</td><td>Cosine similarity of sentence embeddings — catches synonyms</td></tr>
-            <tr><td>Top-3 Match</td><td>Ground truth in model's top-3 candidates (categorical only)</td></tr>
-            <tr><td>BLEU</td><td>N-gram overlap — description field only</td></tr>
-          </tbody>
-        </table>
-      </div>
-
-      <div style="margin-top:2rem;font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--text3);line-height:2">
-        Urmi Dedhia · CMU Language Technologies Institute · April 2026<br>
-        Under Prof. Daphne Ippolito · ArchAIa Project<br>
-        Data: OpenContext · <a href="https://opencontext.org" style="color:var(--blue)">opencontext.org</a>
-      </div>
+    <div class="box" style="max-width:760px">
+      <div class="box-title">Architecture</div>
+      <p style="font-size:0.92rem;line-height:1.85;color:var(--text2);margin-bottom:0.9rem">The pipeline fills missing metadata fields for archaeological artifacts from the OpenContext database using a retrieval-augmented multimodal generation approach.</p>
+      <p style="font-size:0.92rem;line-height:1.85;color:var(--text2);margin-bottom:0.9rem"><strong>Encoding:</strong> Each v4 artifact is encoded as a 1408-dim vector — DINOv2 ViT-L/14 image embedding (1024-dim) concatenated with all-MiniLM-L6-v2 text embedding (384-dim) from available metadata fields.</p>
+      <p style="font-size:0.92rem;line-height:1.85;color:var(--text2);margin-bottom:0.9rem"><strong>Index:</strong> FAISS flat index (IndexFlatIP) built on the 85% train split of v4 (19,215 artifacts). The remaining 15% (3,392 artifacts) are held out as the eval set — never seen by the index.</p>
+      <p style="font-size:0.92rem;line-height:1.85;color:var(--text2);margin-bottom:0.9rem"><strong>Retrieval:</strong> Top-N most similar artifacts retrieved, filtered to only those with the target field populated.</p>
+      <p style="font-size:0.92rem;line-height:1.85;color:var(--text2)"><strong>Generation:</strong> GPT-4o receives the artifact image + available fields + retrieved neighbors as structured JSON context, plus a constrained vocabulary derived from train split distributions.</p>
     </div>
+
+    <div class="box" style="max-width:760px">
+      <div class="box-title">Target Fields</div>
+      <table class="tbl">
+        <thead>
+          <tr><th>Field</th><th>Type</th><th>Coverage in V4</th><th>Notes</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>recovered_material</td><td>Categorical</td><td>38.6%</td><td>Visually inferrable from images</td></tr>
+          <tr><td>recovered_object_type</td><td>Categorical</td><td>29.3%</td><td>Hierarchical types e.g. Architectural::Cover Tile</td></tr>
+          <tr><td>recovered_condition</td><td>Mixed</td><td>33.3%</td><td>Controlled vocab + free text sentences</td></tr>
+          <tr><td>recovered_period</td><td>Categorical</td><td>7.7%</td><td>Strong project-level signal</td></tr>
+          <tr><td>recovered_description</td><td>Free text</td><td>45.4%</td><td>Evaluated with semantic similarity + BLEU</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="box" style="max-width:760px">
+      <div class="box-title">Metrics</div>
+      <table class="tbl">
+        <thead><tr><th>Metric</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>Exact Match</td><td>Strict case-insensitive string equality</td></tr>
+          <tr><td>Fuzzy Match</td><td>Token sort ratio — handles word order variation</td></tr>
+          <tr><td>Semantic Similarity</td><td>Cosine similarity of sentence embeddings — catches synonyms</td></tr>
+          <tr><td>Top-3 Match</td><td>Ground truth in model's top-3 candidates (categorical only)</td></tr>
+          <tr><td>BLEU</td><td>N-gram overlap — description field only</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div style="margin-top:1.5rem;font-family:'JetBrains Mono',monospace;font-size:0.65rem;color:var(--text3);line-height:2">
+      Urmi Dedhia · CMU LTI · April 2026<br>
+      Data: <a href="https://opencontext.org" style="color:var(--teal)">opencontext.org</a>
+    </div>
+  </div>
 
   </main>
 </div>
 
 <script>
-// ── data ──────────────────────────────────────────────────────────────────
-const RUNS = {
-  'top-15': 'top15.json',
-  'top-50': 'top50.json',
-};
-const RUN_COLORS = ['#7D3A10','#2d6a4f'];
-const FIELD_LABELS = {
-  recovered_material:            'Material',
-  recovered_object_type:         'Object Type',
-  recovered_condition:           'Condition',
-  recovered_period:              'Period',
-  recovered_description:         'Description',
-};
-const METRICS = {
-  exact_match:      'Exact Match',
-  fuzzy_token_sort: 'Fuzzy Match',
-  semantic_sim:     'Semantic Sim',
-  top3_match:       'Top-3 Match',
-  bleu:             'BLEU',
-};
-const FIELDS = Object.keys(FIELD_LABELS);
+const RUN_FILES  = {'top-15':'top15.json','top-50':'top50.json'};
+const RUN_COLORS = {'top-15':'#7D3A10','top-50':'#0B5563'};
+const FIELDS     = ['recovered_material','recovered_object_type','recovered_condition','recovered_period','recovered_description'];
+const FL         = {recovered_material:'Material',recovered_object_type:'Object Type',recovered_condition:'Condition',recovered_period:'Period',recovered_description:'Description'};
+const METRICS    = {exact_match:'Exact Match',fuzzy_token_sort:'Fuzzy Match',semantic_sim:'Semantic Sim',top3_match:'Top-3 Match',bleu:'BLEU'};
 
-let DATA = {};
-let activeMetric   = 'exact_match';
-let activeRuns     = [];
-let ddField        = 'recovered_material';
-let ddRun          = null;
-let brField        = 'recovered_material';
-let brRun          = null;
-let showErrorsOnly = false;
-let selectedArtifact = null;
+let DATA={}, activeRuns=[], activeMetric='exact_match';
+let cmpField='recovered_material', cmpRun=null;
+let brField='recovered_material',  brRun=null;
+let errorsOnly=false, selIdx=-1;
+let listResults=[];
 
-// ── load data ─────────────────────────────────────────────────────────────
-async function loadAll() {
-  for (const [name, file] of Object.entries(RUNS)) {
-    try {
-      const r = await fetch(file);
-      if (r.ok) { DATA[name] = await r.json(); }
-    } catch(e) { console.warn('Could not load', file, e); }
+// ── load ──────────────────────────────────────────────────────────────────
+async function loadAll(){
+  for(const[name,file] of Object.entries(RUN_FILES)){
+    try{ const r=await fetch(file); if(r.ok) DATA[name]=await r.json(); }catch(e){}
   }
-  activeRuns = Object.keys(DATA);
-  ddRun = activeRuns[0] || null;
-  brRun = activeRuns[0] || null;
-  buildRunList();
-  buildMetricChips();
-  buildDDChips();
-  buildBRChips();
-  buildStatRow();
-  renderBarChart();
-  renderRadar();
-  renderSummaryTable();
-  renderScatter();
-  renderConfusion();
-  renderArtifactList();
+  activeRuns=Object.keys(DATA);
+  cmpRun=activeRuns[0]||null;
+  brRun=activeRuns[0]||null;
+  init();
 }
 
-// ── run list sidebar ──────────────────────────────────────────────────────
-function buildRunList() {
-  const el = document.getElementById('run-list');
-  el.innerHTML = activeRuns.map((r,i) => `
-    <label class="run-item">
-      <input type="checkbox" checked onchange="toggleRun('${r}',this.checked)">
-      <span class="run-dot" style="background:${RUN_COLORS[i%RUN_COLORS.length]}"></span>
-      <span>${r}</span>
-    </label>
-  `).join('') + Object.keys(RUNS).filter(r => !DATA[r]).map(r =>
-    `<div class="run-item" style="opacity:0.4"><span class="run-dot" style="background:#ccc"></span><span>${r} (pending)</span></div>`
-  ).join('');
+function init(){
+  buildRunList(); buildMetricChips();
+  buildCmpChips(); buildBRChips();
+  buildStatRow(); renderBar(); renderSummary();
+  renderScatter(); renderConfusion(); renderList();
 }
 
-function toggleRun(name, on) {
-  if (on && !activeRuns.includes(name)) activeRuns.push(name);
-  if (!on) activeRuns = activeRuns.filter(r => r !== name);
-  buildStatRow();
-  renderBarChart();
-  renderRadar();
-  renderSummaryTable();
+// ── run list ──────────────────────────────────────────────────────────────
+function buildRunList(){
+  document.getElementById('run-list').innerHTML=
+    Object.keys(RUN_FILES).map(r=>{
+      const loaded=!!DATA[r];
+      const col=RUN_COLORS[r]||'#aaa';
+      return `<label class="run-item" style="${loaded?'':'opacity:0.4'}">
+        <input type="checkbox" ${loaded&&activeRuns.includes(r)?'checked':''} ${loaded?'':'disabled'}
+          onchange="toggleRun('${r}',this.checked)">
+        <span class="run-dot" style="background:${col}"></span>
+        <span>${r}${loaded?'':' (pending)'}</span>
+      </label>`;
+    }).join('');
+}
+function toggleRun(r,on){
+  activeRuns=on?[...new Set([...activeRuns,r])]:activeRuns.filter(x=>x!==r);
+  buildStatRow(); renderBar(); renderSummary();
 }
 
 // ── metric chips ──────────────────────────────────────────────────────────
-function buildMetricChips() {
-  document.getElementById('metric-chips').innerHTML =
-    Object.entries(METRICS).map(([k,l]) =>
-      `<button class="mchip${k===activeMetric?' active':''}" onclick="setMetric('${k}')">${l}</button>`
+function buildMetricChips(){
+  document.getElementById('metric-chips').innerHTML=
+    Object.entries(METRICS).map(([k,l])=>
+      `<button class="chip${k===activeMetric?' active':''}" onclick="setMetric('${k}')">${l}</button>`
     ).join('');
 }
-function setMetric(m) {
-  activeMetric = m;
-  document.querySelectorAll('.mchip').forEach(b => b.classList.remove('active'));
-  document.querySelectorAll('.mchip').forEach(b => { if(b.textContent===METRICS[m]) b.classList.add('active'); });
-  renderBarChart();
-  renderSummaryTable();
+function setMetric(m){
+  activeMetric=m;
+  document.querySelectorAll('#metric-chips .chip').forEach(b=>b.classList.toggle('active',b.textContent===METRICS[m]));
+  renderBar(); renderSummary();
 }
 
-// ── deep dive chips ───────────────────────────────────────────────────────
-function buildDDChips() {
-  document.getElementById('dd-field-chips').innerHTML = FIELDS.map(f =>
-    `<button class="fchip${f===ddField?' active':''}" onclick="setDDField('${f}')">${FIELD_LABELS[f]}</button>`
-  ).join('');
-  document.getElementById('dd-run-chips').innerHTML = activeRuns.map((r,i) =>
-    `<button class="fchip${r===ddRun?' active':''}" style="${r===ddRun?'background:'+RUN_COLORS[i%RUN_COLORS.length]+';border-color:'+RUN_COLORS[i%RUN_COLORS.length]+';color:white':''}" onclick="setDDRun('${r}',${i})">${r}</button>`
-  ).join('');
+// ── compare chips ─────────────────────────────────────────────────────────
+function buildCmpChips(){
+  document.getElementById('cmp-field-chips').innerHTML=
+    FIELDS.map(f=>`<button class="chip${f===cmpField?' active':''}" onclick="setCmpField('${f}')">${FL[f]}</button>`).join('');
+  document.getElementById('cmp-run-chips').innerHTML=
+    activeRuns.map(r=>{
+      const col=RUN_COLORS[r];
+      const on=r===cmpRun;
+      return `<button class="chip${on?' active':''}" style="${on?'background:'+col+';border-color:'+col+';color:white':''}"
+        onclick="setCmpRun('${r}')">${r}</button>`;
+    }).join('');
 }
-function setDDField(f) { ddField=f; buildDDChips(); renderScatter(); renderConfusion(); }
-function setDDRun(r)   { ddRun=r;   buildDDChips(); renderScatter(); renderConfusion(); }
+function setCmpField(f){cmpField=f;buildCmpChips();renderScatter();renderConfusion();}
+function setCmpRun(r){cmpRun=r;buildCmpChips();renderScatter();renderConfusion();}
 
 // ── browser chips ─────────────────────────────────────────────────────────
-function buildBRChips() {
-  document.getElementById('br-field-chips').innerHTML = FIELDS.map(f =>
-    `<button class="fchip${f===brField?' active':''}" onclick="setBRField('${f}')">${FIELD_LABELS[f]}</button>`
-  ).join('');
-  document.getElementById('br-run-chips').innerHTML = activeRuns.map((r,i) =>
-    `<button class="fchip${r===brRun?' active':''}" style="${r===brRun?'background:'+RUN_COLORS[i%RUN_COLORS.length]+';border-color:'+RUN_COLORS[i%RUN_COLORS.length]+';color:white':''}" onclick="setBRRun('${r}')">${r}</button>`
-  ).join('');
+function buildBRChips(){
+  document.getElementById('br-field-chips').innerHTML=
+    FIELDS.map(f=>`<button class="chip${f===brField?' active':''}" onclick="setBRField('${f}')">${FL[f]}</button>`).join('');
+  document.getElementById('br-run-chips').innerHTML=
+    activeRuns.map(r=>{
+      const col=RUN_COLORS[r];
+      const on=r===brRun;
+      return `<button class="chip${on?' active':''}" style="${on?'background:'+col+';border-color:'+col+';color:white':''}"
+        onclick="setBRRun('${r}')">${r}</button>`;
+    }).join('');
 }
-function setBRField(f) { brField=f; buildBRChips(); renderArtifactList(); }
-function setBRRun(r)   { brRun=r;   buildBRChips(); renderArtifactList(); }
+function setBRField(f){brField=f;selIdx=-1;buildBRChips();renderList();}
+function setBRRun(r){brRun=r;selIdx=-1;buildBRChips();renderList();}
 
 // ── stat row ──────────────────────────────────────────────────────────────
-function buildStatRow() {
-  if (!activeRuns.length) return;
-  const d = DATA[activeRuns[0]];
-  if (!d) return;
-  const s = d.summary;
-  const fields = Object.keys(s);
-  const avgEM  = fields.reduce((a,f) => a + (s[f].exact_match||0), 0) / fields.length;
-  const avgSem = fields.reduce((a,f) => a + (s[f].semantic_sim||0), 0) / fields.length;
-  const avgT3  = fields.filter(f => s[f].top3_match != null).reduce((a,f) => a + (s[f].top3_match||0), 0) /
-                 fields.filter(f => s[f].top3_match != null).length;
-  document.getElementById('stat-row').innerHTML = `
-    <div class="stat-card"><div class="stat-n">${(avgEM*100).toFixed(0)}%</div><div class="stat-l">Avg Exact Match</div></div>
-    <div class="stat-card"><div class="stat-n">${(avgSem*100).toFixed(0)}%</div><div class="stat-l">Avg Semantic Sim</div></div>
+function buildStatRow(){
+  const run=activeRuns[0]; if(!run||!DATA[run]) return;
+  const s=DATA[run].summary;
+  const fs=Object.keys(s);
+  const avg=key=>fs.reduce((a,f)=>a+(s[f][key]||0),0)/fs.length;
+  const t3fs=fs.filter(f=>s[f].top3_match!=null);
+  const avgT3=t3fs.length?t3fs.reduce((a,f)=>a+s[f].top3_match,0)/t3fs.length:0;
+  document.getElementById('stat-row').innerHTML=`
+    <div class="stat-card"><div class="stat-n">${(avg('exact_match')*100).toFixed(0)}%</div><div class="stat-l">Avg Exact Match</div></div>
+    <div class="stat-card"><div class="stat-n">${(avg('semantic_sim')*100).toFixed(0)}%</div><div class="stat-l">Avg Semantic Sim</div></div>
     <div class="stat-card"><div class="stat-n">${(avgT3*100).toFixed(0)}%</div><div class="stat-l">Avg Top-3 Match</div></div>
-    <div class="stat-card"><div class="stat-n">${activeRuns.length}</div><div class="stat-l">Runs loaded</div></div>
-  `;
+    <div class="stat-card"><div class="stat-n">${activeRuns.length}</div><div class="stat-l">Runs Loaded</div></div>`;
 }
 
 // ── bar chart ─────────────────────────────────────────────────────────────
-function renderBarChart() {
-  const traces = activeRuns.map((run,i) => {
-    const s = DATA[run]?.summary || {};
-    return {
-      name: run,
-      x: FIELDS.map(f => FIELD_LABELS[f]),
-      y: FIELDS.map(f => s[f]?.[activeMetric] || 0),
-      type: 'bar',
-      marker: { color: RUN_COLORS[i % RUN_COLORS.length] },
-      text: FIELDS.map(f => ((s[f]?.[activeMetric]||0)*100).toFixed(0)+'%'),
-      textposition: 'outside',
-    };
-  });
-  Plotly.react('bar-chart', traces, {
-    barmode: 'group',
-    yaxis: { range:[0,1.15], tickformat:'.0%', gridcolor:'#eee' },
-    xaxis: { gridcolor:'#eee' },
-    plot_bgcolor: 'white', paper_bgcolor: 'white',
-    font: { family: 'Source Serif 4, Georgia, serif', size: 13 },
-    legend: { orientation:'h', y:1.1 },
-    margin: { t:40,b:40,l:50,r:20 },
-  }, { responsive:true });
-}
-
-// ── radar ─────────────────────────────────────────────────────────────────
-function renderRadar() {
-  const cats = ['Exact Match','Fuzzy Match','Semantic Sim','Top-3 Match'];
-  const mkeys = ['exact_match','fuzzy_token_sort','semantic_sim','top3_match'];
-  const traces = activeRuns.map((run,i) => {
-    const s = DATA[run]?.summary || {};
-    const vals = mkeys.map(mk => {
-      const fs = FIELDS.filter(f => s[f]?.[mk] != null);
-      return fs.length ? fs.reduce((a,f) => a+(s[f][mk]||0),0)/fs.length : 0;
-    });
-    return {
-      type:'scatterpolar', name:run,
-      r:[...vals, vals[0]], theta:[...cats, cats[0]],
-      fill:'toself', fillcolor:RUN_COLORS[i%RUN_COLORS.length]+'33',
-      line:{ color:RUN_COLORS[i%RUN_COLORS.length] },
-    };
-  });
-  Plotly.react('radar-chart', traces, {
-    polar:{ radialaxis:{ range:[0,1], tickformat:'.0%' } },
-    font:{ family:'Source Serif 4, Georgia, serif', size:12 },
-    paper_bgcolor:'white',
-    legend:{ orientation:'h', y:-0.1 },
-    margin:{ t:20,b:40,l:40,r:40 },
-  }, { responsive:true });
+function renderBar(){
+  const traces=activeRuns.map(run=>({
+    name:run, type:'bar',
+    x:FIELDS.map(f=>FL[f]),
+    y:FIELDS.map(f=>DATA[run]?.summary?.[f]?.[activeMetric]||0),
+    marker:{color:RUN_COLORS[run]||'#999'},
+    text:FIELDS.map(f=>((DATA[run]?.summary?.[f]?.[activeMetric]||0)*100).toFixed(0)+'%'),
+    textposition:'outside',
+  }));
+  Plotly.react('bar-chart',traces,{
+    barmode:'group',
+    yaxis:{range:[0,1.18],tickformat:'.0%',gridcolor:'#eee'},
+    plot_bgcolor:'white',paper_bgcolor:'white',
+    font:{family:'Source Serif 4,Georgia,serif',size:13},
+    legend:{orientation:'h',y:1.08},
+    margin:{t:40,b:40,l:50,r:20},
+  },{responsive:true});
 }
 
 // ── summary table ─────────────────────────────────────────────────────────
-function renderSummaryTable() {
-  if (!activeRuns.length) return;
-  const thead = document.querySelector('#summary-table thead tr');
-  const tbody = document.querySelector('#summary-table tbody');
-  const cols  = ['Field',...activeRuns.map(r=>r+' EM'),...activeRuns.map(r=>r+' Sem')];
-  thead.innerHTML = cols.map(c=>`<th>${c}</th>`).join('');
-  tbody.innerHTML = FIELDS.map(f => {
-    const label = FIELD_LABELS[f];
-    const ems  = activeRuns.map(r => {
-      const v = DATA[r]?.summary?.[f]?.exact_match;
-      if (v == null) return '<td>—</td>';
-      const cls = v>=0.7?'em-high':v>=0.4?'em-mid':'em-low';
-      return `<td><span class="em-badge ${cls}">${(v*100).toFixed(0)}%</span></td>`;
+function renderSummary(){
+  if(!activeRuns.length) return;
+  const thead=document.querySelector('#summary-table thead tr');
+  const tbody=document.querySelector('#summary-table tbody');
+  thead.innerHTML='<th>Field</th>'+activeRuns.map(r=>`<th>${r} EM</th><th>${r} Sem</th>`).join('');
+  tbody.innerHTML=FIELDS.map(f=>{
+    const cells=activeRuns.map(r=>{
+      const s=DATA[r]?.summary?.[f];
+      const em=s?.exact_match; const sem=s?.semantic_sim;
+      const bc=em==null?'':em>=0.7?'badge-hi':em>=0.4?'badge-md':'badge-lo';
+      return `<td>${em!=null?`<span class="badge ${bc}">${(em*100).toFixed(0)}%</span>`:'—'}</td>`+
+             `<td style="font-family:JetBrains Mono,monospace;font-size:0.75rem">${sem!=null?(sem*100).toFixed(0)+'%':'—'}</td>`;
     }).join('');
-    const sems = activeRuns.map(r => {
-      const v = DATA[r]?.summary?.[f]?.semantic_sim;
-      if (v == null) return '<td>—</td>';
-      return `<td style="font-family:JetBrains Mono,monospace;font-size:0.75rem">${(v*100).toFixed(0)}%</td>`;
-    }).join('');
-    return `<tr><td style="font-weight:600">${label}</td>${ems}${sems}</tr>`;
+    return `<tr><td style="font-weight:600;font-family:Cormorant Garamond,serif;font-size:1rem">${FL[f]}</td>${cells}</tr>`;
   }).join('');
 }
 
 // ── scatter ───────────────────────────────────────────────────────────────
-function renderScatter() {
-  if (!ddRun || !DATA[ddRun]) return;
-  const results = DATA[ddRun].results?.[ddField] || [];
-  const x     = results.map(r => r.fuzzy_token_sort||0);
-  const y     = results.map(r => r.semantic_sim||0);
-  const em    = results.map(r => r.exact_match);
-  const hover = results.map(r => `<b>${esc(r.label)}</b><br>GT: ${esc(r.gt?.slice(0,50))}<br>PRED: ${esc(String(r.pred||'').slice(0,50))}`);
-  Plotly.react('scatter-chart', [{
-    x, y, mode:'markers', type:'scatter',
-    marker:{ color:em.map(e=>e?'#2d6a4f':'#c0392b'), size:9, opacity:0.75 },
-    text:hover, hovertemplate:'%{text}<extra></extra>',
+function renderScatter(){
+  if(!cmpRun||!DATA[cmpRun]) return;
+  const rs=DATA[cmpRun].results?.[cmpField]||[];
+  Plotly.react('scatter-chart',[{
+    x:rs.map(r=>r.fuzzy_token_sort||0),
+    y:rs.map(r=>r.semantic_sim||0),
+    mode:'markers',type:'scatter',
+    marker:{color:rs.map(r=>r.exact_match?'#0B5563':'#7D3A10'),size:9,opacity:0.75},
+    text:rs.map(r=>`<b>${esc(r.label)}</b><br>GT: ${esc((r.gt||'').slice(0,50))}<br>PRED: ${esc(String(r.pred||'').slice(0,50))}`),
+    hovertemplate:'%{text}<extra></extra>',
   },{
     x:[0,1],y:[0,1],mode:'lines',type:'scatter',
-    line:{dash:'dot',color:'#ccc',width:1},
-    hoverinfo:'none', showlegend:false,
-  }], {
-    xaxis:{ title:'Fuzzy match', range:[0,1.05], gridcolor:'#eee' },
-    yaxis:{ title:'Semantic similarity', range:[0,1.05], gridcolor:'#eee' },
-    plot_bgcolor:'white', paper_bgcolor:'white',
-    font:{ family:'Source Serif 4, Georgia, serif', size:12 },
-    margin:{ t:10,b:50,l:60,r:10 },
-    showlegend:false,
-  }, { responsive:true });
+    line:{dash:'dot',color:'#ccc',width:1},hoverinfo:'none',showlegend:false,
+  }],{
+    xaxis:{title:'Fuzzy match',range:[0,1.05],gridcolor:'#eee'},
+    yaxis:{title:'Semantic similarity',range:[0,1.05],gridcolor:'#eee'},
+    plot_bgcolor:'white',paper_bgcolor:'white',
+    font:{family:'Source Serif 4,Georgia,serif',size:12},
+    margin:{t:10,b:50,l:60,r:10},showlegend:false,
+  },{responsive:true});
 }
 
 // ── confusion ─────────────────────────────────────────────────────────────
-function renderConfusion() {
-  if (!ddRun || !DATA[ddRun]) return;
-  const results = DATA[ddRun].results?.[ddField] || [];
-  if (!results.length) return;
-  const gts   = results.map(r => (r.gt||'').slice(0,30));
-  const preds = results.map(r => String(r.pred||'').slice(0,30));
-  const labels = [...new Set([...gts,...preds])].sort();
-  const n = labels.length;
-  const idx = Object.fromEntries(labels.map((l,i)=>[l,i]));
-  const mat = Array.from({length:n},()=>Array(n).fill(0));
-  gts.forEach((g,i) => { if(idx[g]!=null&&idx[preds[i]]!=null) mat[idx[g]][idx[preds[i]]]++; });
-  Plotly.react('confusion-chart', [{
-    z:mat, x:labels, y:labels, type:'heatmap',
-    colorscale:'YlOrRd', text:mat,
-    texttemplate:'%{text}', hovertemplate:'GT: %{y}<br>PRED: %{x}<br>Count: %{z}<extra></extra>',
-  }], {
-    xaxis:{ title:'Predicted', tickangle:-35 },
-    yaxis:{ title:'Ground Truth' },
-    height: Math.max(300, n*24),
-    font:{ family:'Source Serif 4, Georgia, serif', size:10 },
-    margin:{ t:10,b:100,l:120,r:10 },
+function renderConfusion(){
+  if(!cmpRun||!DATA[cmpRun]) return;
+  const rs=DATA[cmpRun].results?.[cmpField]||[];
+  const gts=rs.map(r=>(r.gt||'').slice(0,32));
+  const preds=rs.map(r=>String(r.pred||'').slice(0,32));
+  const labels=[...new Set([...gts,...preds])].sort();
+  const n=labels.length;
+  const idx=Object.fromEntries(labels.map((l,i)=>[l,i]));
+  const mat=Array.from({length:n},()=>Array(n).fill(0));
+  gts.forEach((g,i)=>{ if(idx[g]!=null&&idx[preds[i]]!=null) mat[idx[g]][idx[preds[i]]]++; });
+  Plotly.react('confusion-chart',[{
+    z:mat,x:labels,y:labels,type:'heatmap',
+    colorscale:[[0,'#F6F2EB'],[1,'#7D3A10']],
+    text:mat,texttemplate:'%{text}',
+    hovertemplate:'GT: %{y}<br>PRED: %{x}<br>Count: %{z}<extra></extra>',
+  }],{
+    xaxis:{title:'Predicted',tickangle:-40},
+    yaxis:{title:'Ground Truth'},
+    height:Math.max(280,n*26),
+    font:{family:'Source Serif 4,Georgia,serif',size:10},
+    margin:{t:10,b:110,l:130,r:10},
     paper_bgcolor:'white',
-  }, { responsive:true });
+  },{responsive:true});
 }
 
-// ── artifact browser ──────────────────────────────────────────────────────
-function toggleErrors() {
-  showErrorsOnly = !showErrorsOnly;
-  document.getElementById('errors-toggle').classList.toggle('active', showErrorsOnly);
-  renderArtifactList();
+// ── artifact list ─────────────────────────────────────────────────────────
+function toggleErrors(){
+  errorsOnly=!errorsOnly;
+  document.getElementById('err-toggle').classList.toggle('on',errorsOnly);
+  selIdx=-1; renderList();
 }
 
-function renderArtifactList() {
-  if (!brRun || !DATA[brRun]) return;
-  const query   = document.getElementById('artifact-search').value.toLowerCase();
-  let results   = DATA[brRun].results?.[brField] || [];
-  if (showErrorsOnly) results = results.filter(r => !r.exact_match);
-  if (query) results = results.filter(r =>
-    (r.label||'').toLowerCase().includes(query) ||
-    (r.gt||'').toLowerCase().includes(query)
-  );
-  const el = document.getElementById('artifact-list');
-  el.innerHTML = results.map((r,i) => {
-    const cls = r.exact_match ? 'correct' : 'wrong';
-    const sel = selectedArtifact === r.label ? ' selected' : '';
-    return `<div class="art-card ${cls}${sel}" onclick="selectArtifact(${i},${JSON.stringify(results).length>0?'results':'[]'})">
-      <div class="art-label">${esc(r.label)}</div>
+function renderList(){
+  if(!brRun||!DATA[brRun]) return;
+  const q=document.getElementById('art-search').value.toLowerCase();
+  let rs=DATA[brRun].results?.[brField]||[];
+  if(errorsOnly) rs=rs.filter(r=>!r.exact_match);
+  if(q) rs=rs.filter(r=>(r.label||'').toLowerCase().includes(q)||(r.gt||'').toLowerCase().includes(q));
+  listResults=rs;
+  document.getElementById('list-count').textContent=`${rs.length} artifact${rs.length!==1?'s':''}`;
+  const el=document.getElementById('art-list');
+  if(!rs.length){ el.innerHTML=`<div class="empty">No artifacts match</div>`; return; }
+  el.innerHTML=rs.map((r,i)=>`
+    <div class="art-item ${r.exact_match?'ok':'err'}${i===selIdx?' sel':''}" onclick="selectArt(${i})">
+      <div class="art-name">${esc(r.label)}</div>
       <div class="art-meta">${esc(r.item_class||'')} · ${esc((r.project||'').slice(0,35))}</div>
       <div class="art-scores">
-        <span class="score-tag">EM: ${r.exact_match?'✓':'✗'}</span>
-        <span class="score-tag">Fuzz: ${((r.fuzzy_token_sort||0)*100).toFixed(0)}%</span>
-        <span class="score-tag">Sem: ${((r.semantic_sim||0)*100).toFixed(0)}%</span>
+        <span class="sc">EM: ${r.exact_match?'✓':'✗'}</span>
+        <span class="sc">Fuzz: ${((r.fuzzy_token_sort||0)*100).toFixed(0)}%</span>
+        <span class="sc">Sem: ${((r.semantic_sim||0)*100).toFixed(0)}%</span>
       </div>
-    </div>`;
-  }).join('') || '<div style="color:var(--text3);font-style:italic;padding:1rem">No artifacts match</div>';
-
-  // store results for click handler
-  el._results = results;
+    </div>`).join('');
 }
 
-function selectArtifact(i, _unused) {
-  const results = document.getElementById('artifact-list')._results || [];
-  const r = results[i];
-  if (!r) return;
-  selectedArtifact = r.label;
-
-  // update selected highlight
-  document.querySelectorAll('.art-card').forEach((c,j) => {
-    c.classList.toggle('selected', j === i);
-  });
-
-  const em   = r.exact_match;
-  const gt   = r.gt || '';
-  const pred = String(r.pred || '');
-  const top3 = r.top3 || [];
-  const bleu = r.bleu;
-
-  const top3html = top3.length ? `
-    <div style="margin-bottom:0.8rem">
-      <div class="detail-field">Top-3 Candidates</div>
-      <div class="top3-list">
-        ${top3.map(c => {
-          const match = c.trim().toLowerCase() === gt.trim().toLowerCase();
-          return `<span class="top3-item${match?' match':''}">${esc(c)}</span>`;
-        }).join('')}
-      </div>
-    </div>` : '';
-
-  const bleuhtml = bleu != null ? `<span>BLEU: <strong>${bleu.toFixed(3)}</strong></span>` : '';
-
-  document.getElementById('artifact-detail').innerHTML = `
-    <div class="detail-card">
-      <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:1rem">
+function selectArt(i){
+  selIdx=i;
+  // update highlight
+  document.querySelectorAll('.art-item').forEach((el,j)=>el.classList.toggle('sel',j===i));
+  const r=listResults[i];
+  if(!r) return;
+  const em=r.exact_match;
+  const top3=r.top3||[];
+  const bleu=r.bleu;
+  const top3html=top3.length?`
+    <div class="det-label">Top-3 Candidates</div>
+    <div class="top3wrap">
+      ${top3.map(c=>{
+        const m=c.trim().toLowerCase()===(r.gt||'').trim().toLowerCase();
+        return `<span class="t3${m?' match':''}">${esc(c)}</span>`;
+      }).join('')}
+    </div>`:'' ;
+  document.getElementById('art-detail').innerHTML=`
+    <div class="detail">
+      <div class="det-header">
         <div>
-          <div style="font-family:Cormorant Garamond,serif;font-size:1.2rem;font-weight:700">${esc(r.label)}</div>
-          <div style="font-size:0.8rem;color:var(--text3);font-style:italic">${esc(r.item_class||'')} · ${esc(r.project||'')}</div>
+          <div class="det-name">${esc(r.label)}</div>
+          <div class="det-meta">${esc(r.item_class||'')} · ${esc(r.project||'')}</div>
         </div>
-        <span style="background:${em?'var(--green)':'var(--red)'};color:white;padding:3px 10px;border-radius:3px;font-family:JetBrains Mono,monospace;font-size:0.68rem">
-          ${em?'Exact Match':'No Match'}
-        </span>
+        <span class="match-pill ${em?'ok':'err'}">${em?'Exact Match':'No Match'}</span>
       </div>
-
-      <div class="detail-field">Ground Truth</div>
-      <div class="detail-gt">${esc(gt)}</div>
-
-      <div class="detail-field">Predicted</div>
-      <div class="detail-pred${em?' correct':''}">${esc(pred)}</div>
-
+      <div class="det-label">Ground Truth</div>
+      <div class="det-val gt">${esc(r.gt||'')}</div>
+      <div class="det-label">Predicted</div>
+      <div class="det-val ${em?'pred-ok':'pred-err'}">${esc(String(r.pred||''))}</div>
       ${top3html}
-
-      <div class="detail-scores">
+      <div class="det-scores">
         <span>Fuzzy: <strong>${((r.fuzzy_token_sort||0)*100).toFixed(0)}%</strong></span>
         <span>Semantic: <strong>${((r.semantic_sim||0)*100).toFixed(0)}%</strong></span>
-        ${bleuhtml}
+        ${r.top3_match!=null?`<span>Top-3: <strong>${r.top3_match?'✓':'✗'}</strong></span>`:''}
+        ${bleu!=null?`<span>BLEU: <strong>${bleu.toFixed(3)}</strong></span>`:''}
       </div>
-    </div>
-  `;
+    </div>`;
 }
 
 // ── tab nav ───────────────────────────────────────────────────────────────
-function showTab(name) {
-  document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+function showTab(name){
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
   document.getElementById('panel-'+name).classList.add('active');
-  document.querySelectorAll('.tab-btn').forEach(b => {
-    if (b.textContent.toLowerCase().includes(name.replace('-',' ').toLowerCase())) b.classList.add('active');
-  });
-  if (name==='deepdive') { renderScatter(); renderConfusion(); }
-  if (name==='browser')  { renderArtifactList(); }
+  document.getElementById('tb-'+name).classList.add('active');
+  if(name==='compare'){renderScatter();renderConfusion();}
+  if(name==='browser'){renderList();}
 }
 
-function esc(s) { return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function esc(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
 
 loadAll();
 </script>
